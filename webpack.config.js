@@ -1,22 +1,30 @@
-// Webpack configuration
 const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
-const isProduction = process.env.NODE_ENV === 'production';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const Visualizer = require('webpack-visualizer-plugin');
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
-  entry: './src/lib/components/DatePicker/index.js',
+  entry: isProduction ? './src/lib/index.js' : './src/dev/index.js',
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'umd',
-    globalObject: 'this'
+    libraryTarget: isProduction ? 'umd' : undefined,
+    library: isProduction ? 'ReactGoogleFlightDatepicker' : undefined,
+    globalObject: isProduction ? 'this' : undefined,
+    clean: true,
+    publicPath: '/'
   },
-  externals: {
-    react: 'react',
+  externals: isProduction ? {
+    react: {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react',
+      umd: 'react',
+    },
     'react-dom': {
       root: 'ReactDOM',
       commonjs2: 'react-dom',
@@ -24,50 +32,81 @@ module.exports = {
       amd: 'react-dom',
       umd: 'react-dom',
     },
-  },
+  } : {},
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              ['@babel/preset-react', { runtime: 'automatic' }]
+            ],
+            plugins: [
+              '@babel/plugin-proposal-class-properties',
+              '@babel/plugin-proposal-object-rest-spread'
+            ],
+            cacheDirectory: true,
+            cacheCompression: false,
+          }
         },
       },
       {
         test: /\.(s?)css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
           'css-loader',
-          'sass-loader'
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+              sassOptions: {
+                fiber: false,
+                outputStyle: 'compressed',
+              },
+            }
+          }
         ],
       },
       {
         test: /\.svg$/,
-        use: [
-          {
-            loader: "babel-loader"
-          },
-          {
-            loader: "react-svg-loader",
-            options: {
-              jsx: true // true outputs JSX tags
-            }
-          }
-        ]
-      },
+        use: ['@svgr/webpack'],
+      }
     ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      'react-svg-loader': '@svgr/webpack'
+    }
   },
   optimization: {
     minimizer: [new TerserPlugin()],
   },
   plugins: [
-    new MiniCssExtractPlugin(),
-    new Visualizer({
-      filename: '../statistics.html'
+    new MiniCssExtractPlugin({
+      filename: 'styles.css'
     }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: process.env.NODE_ENV || 'development',
+      BABEL_ENV: process.env.BABEL_ENV || 'development'
     })
   ],
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
+      publicPath: '/'
+    },
+    port: 3000,
+    hot: true,
+    open: true,
+    historyApiFallback: true,
+    devMiddleware: {
+      writeToDisk: true
+    }
+  },
+  devtool: isProduction ? 'source-map' : 'eval-source-map'
 };

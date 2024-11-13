@@ -706,8 +706,8 @@
     }
 
     .day {
-      width: (100% / 7);
-      max-width: (100% / 7);
+      width: calc(100% / 7);
+      max-width: calc(100% / 7);
 
       &.selected:hover,
       &.hovered:hover {
