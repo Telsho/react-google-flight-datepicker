@@ -2,8 +2,27 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { RangeDatePicker, SingleDatePicker } from '../lib';
 import '../lib/components/DatePicker/styles.scss';
+import dayjs from 'dayjs';
 
 export default function App() {
+
+    const subTextDict = {
+      [dayjs().format('YYYY-MM-DD')]: "500$",
+      [dayjs().add(1, 'day').format('YYYY-MM-DD')]: "543$",
+      [dayjs().add(2, 'day').format('YYYY-MM-DD')]: "94$",
+      [dayjs().add(3, 'day').format('YYYY-MM-DD')]: "94$",
+      [dayjs().add(4, 'day').format('YYYY-MM-DD')]: "94$",
+      [dayjs().add(5, 'day').format('YYYY-MM-DD')]: "94$",
+      [dayjs().add(6, 'day').format('YYYY-MM-DD')]: "94$",
+      [dayjs().add(7, 'day').format('YYYY-MM-DD')]: "94$",
+      [dayjs().add(8, 'day').format('YYYY-MM-DD')]: "94$",
+      [dayjs().add(9, 'day').format('YYYY-MM-DD')]: "94$",
+      [dayjs().add(10, 'day').format('YYYY-MM-DD')]: "94$",
+      [dayjs().add(11, 'day').format('YYYY-MM-DD')]: "940$",
+    };
+
+    console.log(subTextDict);
+
     return (
       <div className="App">
         <h1>react-google-flight-datepicker</h1>
@@ -74,6 +93,17 @@ export default function App() {
           startDatePlaceholder="From"
           endDatePlaceholder="To"
           highlightToday
+        />
+
+
+
+        <h2>Subtext</h2>
+        <RangeDatePicker
+          startDate={new Date()}
+          endDate={new Date().getDate() + 15}
+          startDatePlaceholder="From"
+          endDatePlaceholder="To"
+          subTextDict={subTextDict}
         />
         <br />
       </div>

@@ -25,6 +25,7 @@ const MonthCalendar = forwardRef(({
   highlightToday,
   singleCalendar,
   handleHoverDay,
+  subTextDict
 }, ref) => {
   function generateWeek() {
     const { totalWeek, totalDay } = getMonthInfo(year, month, startWeekDay);
@@ -49,6 +50,7 @@ const MonthCalendar = forwardRef(({
         weekIndex={index}
         highlightToday={highlightToday}
         handleHoverDay={handleHoverDay}
+        subTextDict={subTextDict}
         ref={ref}
       />
     ));
@@ -106,6 +108,7 @@ MonthCalendar.propTypes = {
   highlightToday: PropTypes.bool,
   singleCalendar: PropTypes.bool,
   handleHoverDay: PropTypes.func,
+  subTextDict: PropTypes.object
 };
 
 MonthCalendar.defaultProps = {
@@ -127,6 +130,7 @@ MonthCalendar.defaultProps = {
   highlightToday: false,
   singleCalendar: false,
   handleHoverDay: () => {},
+  subTextDict: null
 };
 
 export default MonthCalendar;

@@ -35,6 +35,7 @@ const Dialog = ({
   dateInputSeperator,
   singleCalendar,
   tooltip,
+  subTextDict
 }) => {
   const [hideAnimation, setHideAnimation] = useState(false);
   const [dateChanged, setDateChanged] = useState();
@@ -123,6 +124,7 @@ const Dialog = ({
               isSingle={isSingle}
               highlightToday={highlightToday}
               tooltip={tooltip}
+              subTextDict={subTextDict}
             />
           )
           : (
@@ -144,6 +146,7 @@ const Dialog = ({
               highlightToday={highlightToday}
               singleCalendar={singleCalendar}
               tooltip={tooltip}
+              subTextDict={subTextDict}
             />
           )}
       </div>
@@ -198,6 +201,7 @@ Dialog.propTypes = {
     PropTypes.node,
     PropTypes.func,
   ]),
+  subTextDict: PropTypes.object
 };
 
 Dialog.defaultProps = {
@@ -228,6 +232,7 @@ Dialog.defaultProps = {
   dateInputSeperator: null,
   singleCalendar: false,
   tooltip: '',
+  subTextDict: null
 };
 
 export default Dialog;

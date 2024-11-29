@@ -500,6 +500,23 @@
     }
   }
 
+  .day-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  
+  .sub-text {
+    font-size: 0.75em;
+    color: #666;
+    text-align: center;
+  }
+  
+  .day.has-subtext {
+    padding-bottom: 4px;
+  }
+
   .calendar-flippers {
     position: absolute;
     top: 0;
