@@ -26,6 +26,7 @@ const DialogContentDesktop = ({
   highlightToday,
   singleCalendar,
   tooltip,
+  subTextDict
 }) => {
   const containerRef = useRef();
   const tooltipRef = useRef();
@@ -274,6 +275,7 @@ const DialogContentDesktop = ({
         highlightToday={highlightToday}
         singleCalendar={singleCalendar}
         handleHoverDay={handleHoverDay}
+        subTextDict={subTextDict}
         ref={tooltipRef}
       />
     ));
@@ -347,6 +349,7 @@ DialogContentDesktop.propTypes = {
     PropTypes.node,
     PropTypes.func,
   ]),
+  subTextDict: PropTypes.object
 };
 
 DialogContentDesktop.defaultProps = {
@@ -366,6 +369,7 @@ DialogContentDesktop.defaultProps = {
   singleCalendar: false,
   weekDayFormat: '',
   tooltip: '',
+  subTextDict: null,
 };
 
 export default DialogContentDesktop;

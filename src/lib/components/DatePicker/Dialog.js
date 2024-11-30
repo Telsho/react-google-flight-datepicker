@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import cx from 'classnames';
+import React, { useEffect, useState, useRef } from "react";
+import PropTypes from "prop-types";
+import cx from "classnames";
 
-import BackIcon from '../../assets/svg/back.svg';
-import DateInputGroup from './DateInputGroup';
-import DialogContentMobile from './DialogContentMobile';
-import DialogContentDesktop from './DialogContentDesktop';
+import BackIcon from "../../assets/svg/back.svg";
+import DateInputGroup from "./DateInputGroup";
+import DialogContentMobile from "./DialogContentMobile";
+import DialogContentDesktop from "./DialogContentDesktop";
 
 const Dialog = ({
   toggleDialog,
@@ -35,6 +35,8 @@ const Dialog = ({
   dateInputSeperator,
   singleCalendar,
   tooltip,
+  subTextDict,
+  expandDirection,
 }) => {
   const [hideAnimation, setHideAnimation] = useState(false);
   const [dateChanged, setDateChanged] = useState();
@@ -52,7 +54,9 @@ const Dialog = ({
     if (complsOpen) {
       setTimeout(() => {
         if (containerRef.current && containerRef.current.getElementById) {
-          const startDateInput = containerRef.current.getElementById('start-date-input-button');
+          const startDateInput = containerRef.current.getElementById(
+            "start-date-input-button"
+          );
           if (startDateInput) {
             startDateInput.focus();
           }
@@ -63,15 +67,16 @@ const Dialog = ({
 
   return (
     <div
-      className={cx('dialog-date-picker', {
+      className={cx("dialog-date-picker", {
         open: complsOpen,
         hide: !complsOpen && hideAnimation,
         single: singleCalendar && !isMobile,
+        "expand-left": expandDirection === "left",
+        "expand-right": expandDirection === "right",
       })}
       ref={containerRef}
     >
-      {!hideDialogHeader
-        && (
+      {!hideDialogHeader && (
         <div className="dialog-header">
           <button
             type="button"
@@ -103,54 +108,58 @@ const Dialog = ({
             Reset
           </button>
         </div>
-        )}
+      )}
 
       <div className="dialog-content">
-        {isMobile
-          ? (
-            <DialogContentMobile
-              fromDate={fromDate}
-              toDate={toDate}
-              hoverDate={hoverDate}
-              onSelectDate={onSelectDate}
-              startWeekDay={startWeekDay}
-              minDate={minDate}
-              maxDate={maxDate}
-              dateFormat={dateFormat}
-              weekDayFormat={weekDayFormat}
-              monthFormat={monthFormat}
-              complsOpen={complsOpen}
-              isSingle={isSingle}
-              highlightToday={highlightToday}
-              tooltip={tooltip}
-            />
-          )
-          : (
-            <DialogContentDesktop
-              fromDate={fromDate}
-              toDate={toDate}
-              hoverDate={hoverDate}
-              onSelectDate={onSelectDate}
-              onHoverDate={onHoverDate}
-              startWeekDay={startWeekDay}
-              minDate={minDate}
-              maxDate={maxDate}
-              dateFormat={dateFormat}
-              weekDayFormat={weekDayFormat}
-              monthFormat={monthFormat}
-              isSingle={isSingle}
-              complsOpen={complsOpen}
-              dateChanged={dateChanged}
-              highlightToday={highlightToday}
-              singleCalendar={singleCalendar}
-              tooltip={tooltip}
-            />
-          )}
+        {isMobile ? (
+          <DialogContentMobile
+            fromDate={fromDate}
+            toDate={toDate}
+            hoverDate={hoverDate}
+            onSelectDate={onSelectDate}
+            startWeekDay={startWeekDay}
+            minDate={minDate}
+            maxDate={maxDate}
+            dateFormat={dateFormat}
+            weekDayFormat={weekDayFormat}
+            monthFormat={monthFormat}
+            complsOpen={complsOpen}
+            isSingle={isSingle}
+            highlightToday={highlightToday}
+            tooltip={tooltip}
+            subTextDict={subTextDict}
+          />
+        ) : (
+          <DialogContentDesktop
+            fromDate={fromDate}
+            toDate={toDate}
+            hoverDate={hoverDate}
+            onSelectDate={onSelectDate}
+            onHoverDate={onHoverDate}
+            startWeekDay={startWeekDay}
+            minDate={minDate}
+            maxDate={maxDate}
+            dateFormat={dateFormat}
+            weekDayFormat={weekDayFormat}
+            monthFormat={monthFormat}
+            isSingle={isSingle}
+            complsOpen={complsOpen}
+            dateChanged={dateChanged}
+            highlightToday={highlightToday}
+            singleCalendar={singleCalendar}
+            tooltip={tooltip}
+            subTextDict={subTextDict}
+          />
+        )}
       </div>
-      {!hideDialogFooter
-        && (
+      {!hideDialogFooter && (
         <div className="dialog-footer">
-          <button type="button" className="submit-button" onClick={toggleDialog} tabIndex="0">
+          <button
+            type="button"
+            className="submit-button"
+            onClick={toggleDialog}
+            tabIndex="0"
+          >
             Done
           </button>
           <button
@@ -161,7 +170,7 @@ const Dialog = ({
             Reset
           </button>
         </div>
-        )}
+      )}
     </div>
   );
 };
@@ -198,6 +207,8 @@ Dialog.propTypes = {
     PropTypes.node,
     PropTypes.func,
   ]),
+  subTextDict: PropTypes.object,
+  expandDirection: PropTypes.string,
 };
 
 Dialog.defaultProps = {
@@ -217,17 +228,19 @@ Dialog.defaultProps = {
   startWeekDay: null,
   minDate: null,
   maxDate: null,
-  dateFormat: '',
-  monthFormat: '',
+  dateFormat: "",
+  monthFormat: "",
   isSingle: false,
   isMobile: false,
   highlightToday: false,
-  weekDayFormat: '',
+  weekDayFormat: "",
   hideDialogHeader: false,
   hideDialogFooter: false,
   dateInputSeperator: null,
   singleCalendar: false,
-  tooltip: '',
+  tooltip: "",
+  subTextDict: null,
+  expandDirection: "right",
 };
 
 export default Dialog;

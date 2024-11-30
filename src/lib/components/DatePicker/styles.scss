@@ -191,6 +191,17 @@
     &.hide {
       animation: hidePopup 0.2s forwards;
     }
+
+    &.expand-right {
+      left: -2px;
+      right: auto;
+      transform-origin: top left;
+    }
+    &.expand-left {
+      left: auto;
+      right: -2px;
+      transform-origin: top right;
+    }
   }
 
   .dialog-header {
@@ -500,6 +511,23 @@
     }
   }
 
+  .day-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  
+  .sub-text {
+    font-size: 0.75em;
+    color: #666;
+    text-align: center;
+  }
+  
+  .day.has-subtext {
+    padding-bottom: 4px;
+  }
+
   .calendar-flippers {
     position: absolute;
     top: 0;
@@ -706,8 +734,8 @@
     }
 
     .day {
-      width: (100% / 7);
-      max-width: (100% / 7);
+      width: calc(100% / 7);
+      max-width: calc(100% / 7);
 
       &.selected:hover,
       &.hovered:hover {

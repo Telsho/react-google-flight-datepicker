@@ -21,6 +21,7 @@ const DialogContentMobile = ({
   isSingle,
   highlightToday,
   tooltip,
+  subTextDict
 }) => {
   const [rowCount, setRowCount] = useState(2400);
   const minYear = minDate ? dayjs(minDate).year() : 1900;
@@ -75,6 +76,7 @@ const DialogContentMobile = ({
           isSingle={isSingle}
           highlightToday={highlightToday}
           tooltip={tooltip}
+          subTextDict={subTextDict}
         />
       </div>
     );
@@ -144,6 +146,7 @@ DialogContentMobile.propTypes = {
     PropTypes.node,
     PropTypes.func,
   ]),
+  subTextDict: PropTypes.object
 };
 
 DialogContentMobile.defaultProps = {
@@ -160,6 +163,7 @@ DialogContentMobile.defaultProps = {
   highlightToday: false,
   weekDayFormat: '',
   tooltip: '',
+  subTextDict: null
 };
 
 export default DialogContentMobile;
