@@ -299,6 +299,7 @@ RangeDatePicker.propTypes = {
     PropTypes.node,
     PropTypes.func,
   ]),
+  subTextDict: PropTypes.object,
 };
 
 RangeDatePicker.defaultProps = {
@@ -324,6 +325,7 @@ RangeDatePicker.defaultProps = {
   isOpen: false,
   onCloseCalendar: () => {},
   tooltip: '',
+  subTextDict: null,
 };
 
 export default RangeDatePicker;

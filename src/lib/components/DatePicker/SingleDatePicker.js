@@ -29,6 +29,7 @@ const SingleDatePicker = ({
   singleCalendar,
   weekDayFormat,
   tooltip,
+  subTextDict,
 }) => {
   const [complsOpen, setComplsOpen] = useState(false);
   const containerRef = useRef(null);
@@ -186,6 +187,7 @@ const SingleDatePicker = ({
             weekDayFormat={weekDayFormat}
             singleCalendar={singleCalendar}
             tooltip={tooltip}
+            subTextDict={subTextDict}
           />
         </DialogWrapper>
       </div>
@@ -215,6 +217,7 @@ SingleDatePicker.propTypes = {
     PropTypes.node,
     PropTypes.func,
   ]),
+  subTextDict: PropTypes.object,
 };
 
 SingleDatePicker.defaultProps = {
@@ -235,6 +238,7 @@ SingleDatePicker.defaultProps = {
   onCloseCalendar: () => {},
   singleCalendar: false,
   tooltip: '',
+  subTextDict: null,
 };
 
 export default SingleDatePicker;
