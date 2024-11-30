@@ -94,8 +94,7 @@ export default function App() {
           endDatePlaceholder="To"
           highlightToday
         />
-
-
+        <br />
 
         <h2>Subtext</h2>
         <RangeDatePicker
@@ -104,6 +103,16 @@ export default function App() {
           startDatePlaceholder="From"
           endDatePlaceholder="To"
           subTextDict={subTextDict}
+        />
+        <br />
+
+        <h2>Left Expanding</h2>
+        <RangeDatePicker
+          startDate={new Date()}
+          endDate={new Date().getDate() + 15}
+          startDatePlaceholder="From"
+          endDatePlaceholder="To"
+          expandDirection="left"
         />
         <br />
       </div>
