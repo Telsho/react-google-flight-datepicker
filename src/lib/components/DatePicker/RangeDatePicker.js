@@ -11,30 +11,30 @@ import DialogWrapper from './DialogWrapper';
 import Dialog from './Dialog';
 
 const RangeDatePicker = ({
-  startDate,
-  endDate,
-  startDatePlaceholder,
-  endDatePlaceholder,
-  className,
-  disabled,
-  onChange,
-  onFocus,
-  startWeekDay,
-  minDate,
-  maxDate,
-  dateFormat,
-  weekDayFormat,
-  monthFormat,
-  highlightToday,
-  hideDialogHeader,
-  hideDialogFooter,
-  dateInputSeperator,
-  hideDialogAfterSelectEndDate,
-  isOpen,
-  onCloseCalendar,
-  tooltip,
-  subTextDict,
-  expandDirection
+  startDate = null,
+  endDate = null,
+  className = '',
+  disabled = false,
+  startDatePlaceholder = 'Start date',
+  endDatePlaceholder = 'End date',
+  onChange = () => {},
+  onFocus = () => {},
+  startWeekDay = 'monday',
+  minDate = null,
+  maxDate = null,
+  weekDayFormat = 'dd',
+  dateFormat = '',
+  monthFormat = '',
+  highlightToday = false,
+  dateInputSeperator = null,
+  hideDialogHeader = false,
+  hideDialogFooter = false,
+  hideDialogAfterSelectEndDate = false,
+  isOpen = false,
+  onCloseCalendar = () => {},
+  tooltip = '',
+  subTextDict = null,
+  expandDirection = "right"
 }) => {
   const [complsOpen, setComplsOpen] = useState(false);
   const containerRef = useRef(null);
@@ -303,33 +303,6 @@ RangeDatePicker.propTypes = {
   ]),
   subTextDict: PropTypes.object,
   expandDirection: PropTypes.string
-};
-
-RangeDatePicker.defaultProps = {
-  startDate: null,
-  endDate: null,
-  className: '',
-  disabled: false,
-  startDatePlaceholder: 'Start date',
-  endDatePlaceholder: 'End date',
-  onChange: () => {},
-  onFocus: () => {},
-  startWeekDay: 'monday',
-  minDate: null,
-  maxDate: null,
-  weekDayFormat: 'dd',
-  dateFormat: '',
-  monthFormat: '',
-  highlightToday: false,
-  dateInputSeperator: null,
-  hideDialogHeader: false,
-  hideDialogFooter: false,
-  hideDialogAfterSelectEndDate: false,
-  isOpen: false,
-  onCloseCalendar: () => {},
-  tooltip: '',
-  subTextDict: null,
-  expandDirection: "right"
 };
 
 export default RangeDatePicker;

@@ -8,21 +8,21 @@ import PrevIcon from '../../assets/svg/prev.svg';
 import NextIcon from '../../assets/svg/next.svg';
 
 const DateInput = ({
-  handleClickDateInput,
-  showIcon,
-  tabIndex,
-  isFocus,
-  value,
-  placeholder,
-  handleChangeDate,
-  dateFormat,
-  isSingle,
-  onFocus,
-  name,
-  nonFocusable,
-  fromDate,
-  minDate,
-  maxDate,
+  handleClickDateInput = () => {},
+  showIcon = false,
+  tabIndex = '',
+  isFocus = false,
+  value = null,
+  placeholder = null,
+  handleChangeDate = () => {},
+  dateFormat = '',
+  isSingle = false,
+  onFocus = () => {},
+  name = '',
+  nonFocusable = false,
+  fromDate = null,
+  minDate = null,
+  maxDate = null,
 }) => {
   const [formattedDate, setFormattedDate] = useState(null);
   const [disablePrev, setDisablePrev] = useState(false);
@@ -126,25 +126,6 @@ DateInput.propTypes = {
   fromDate: PropTypes.instanceOf(Date),
   minDate: PropTypes.instanceOf(Date),
   maxDate: PropTypes.instanceOf(Date),
-};
-
-DateInput.defaultProps = {
-  handleClickDateInput: () => {},
-  showIcon: false,
-  tabIndex: '',
-  isFocus: false,
-  value: null,
-  placeholder: null,
-  handleChangeDate: () => {},
-  dateFormat: '',
-  isSingle: false,
-  onFocus: () => {},
-  name: '',
-  nonFocusable: false,
-  fromDate: null,
-  minDate: null,
-  maxDate: null,
-
 };
 
 export default DateInput;

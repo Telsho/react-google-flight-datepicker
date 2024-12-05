@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-bind */
 import React, {
   useState, useRef, useEffect, useLayoutEffect,
 } from 'react';
@@ -12,25 +11,25 @@ import Dialog from './Dialog';
 import DialogWrapper from './DialogWrapper';
 
 const SingleDatePicker = ({
-  startDate,
-  startDatePlaceholder,
-  className,
-  disabled,
-  onChange,
-  onFocus,
-  startWeekDay,
-  minDate,
-  maxDate,
-  dateFormat,
-  monthFormat,
-  highlightToday,
-  isOpen,
-  onCloseCalendar,
-  singleCalendar,
-  weekDayFormat,
-  tooltip,
-  subTextDict,
-  expandDirection
+  startDate = null,
+  startDatePlaceholder = 'Date',
+  className = '',
+  disabled = false,
+  onChange = () => {},
+  onFocus = () => {},
+  startWeekDay = 'monday',
+  minDate = null,
+  maxDate = null,
+  dateFormat = '',
+  monthFormat = '',
+  highlightToday = false,
+  isOpen = false,
+  onCloseCalendar = () => {},
+  singleCalendar = false,
+  weekDayFormat = 'dd',
+  tooltip = '',
+  subTextDict = null,
+  expandDirection = 'right'
 }) => {
   const [complsOpen, setComplsOpen] = useState(false);
   const containerRef = useRef(null);
@@ -52,7 +51,6 @@ const SingleDatePicker = ({
     handleResize();
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', handleResize);
-
       return () => window.removeEventListener('resize', handleResize);
     }
   }, []);
@@ -90,7 +88,6 @@ const SingleDatePicker = ({
     }
 
     document.addEventListener('click', handleDocumentClick);
-
     return () => document.removeEventListener('click', handleDocumentClick);
   }, []);
 
@@ -221,28 +218,6 @@ SingleDatePicker.propTypes = {
   ]),
   subTextDict: PropTypes.object,
   expandDirection: PropTypes.string
-};
-
-SingleDatePicker.defaultProps = {
-  startDate: null,
-  className: '',
-  disabled: false,
-  startDatePlaceholder: 'Date',
-  onChange: () => {},
-  onFocus: () => {},
-  startWeekDay: 'monday',
-  weekDayFormat: 'dd',
-  minDate: null,
-  maxDate: null,
-  dateFormat: '',
-  monthFormat: '',
-  highlightToday: false,
-  isOpen: false,
-  onCloseCalendar: () => {},
-  singleCalendar: false,
-  tooltip: '',
-  subTextDict: null,
-  expandDirection: "rigth"
 };
 
 export default SingleDatePicker;

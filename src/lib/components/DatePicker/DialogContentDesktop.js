@@ -1,32 +1,30 @@
-import React, {
-  useEffect, useState, useRef, useCallback,
-} from 'react';
-import PropTypes from 'prop-types';
-import cx from 'classnames';
-import dayjs from 'dayjs';
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import PropTypes from "prop-types";
+import cx from "classnames";
+import dayjs from "dayjs";
 
-import PrevIcon from '../../assets/svg/prev.svg';
-import NextIcon from '../../assets/svg/next.svg';
-import MonthCalendar from './MonthCalendar';
+import PrevIcon from "../../assets/svg/prev.svg";
+import NextIcon from "../../assets/svg/next.svg";
+import MonthCalendar from "./MonthCalendar";
 
 const DialogContentDesktop = ({
-  fromDate,
-  toDate,
-  hoverDate,
-  onSelectDate,
-  onHoverDate,
-  startWeekDay,
-  minDate,
-  maxDate,
-  monthFormat,
-  weekDayFormat,
-  isSingle,
-  complsOpen,
-  dateChanged,
-  highlightToday,
-  singleCalendar,
-  tooltip,
-  subTextDict
+  fromDate = null,
+  toDate = null,
+  hoverDate = null,
+  onSelectDate = () => {},
+  onHoverDate = () => {},
+  startWeekDay = null,
+  minDate = null,
+  maxDate = null,
+  monthFormat = "",
+  isSingle = false,
+  complsOpen = false,
+  dateChanged = null,
+  highlightToday = false,
+  singleCalendar = false,
+  weekDayFormat = "",
+  tooltip = "",
+  subTextDict = null,
 }) => {
   const containerRef = useRef();
   const tooltipRef = useRef();
@@ -39,9 +37,9 @@ const DialogContentDesktop = ({
   const [dayValue, setDayValue] = useState(0);
 
   function getArrayMonth(date, singleCalendar) {
-    const prevMonth = dayjs(date).subtract(1, 'month');
-    const nextMonth = dayjs(date).add(1, 'month');
-    const futureMonth = dayjs(date).add(2, 'month');
+    const prevMonth = dayjs(date).subtract(1, "month");
+    const nextMonth = dayjs(date).add(1, "month");
+    const futureMonth = dayjs(date).add(2, "month");
 
     if (singleCalendar) {
       return [prevMonth, focusDate, nextMonth];
@@ -50,14 +48,16 @@ const DialogContentDesktop = ({
     return [prevMonth, focusDate, nextMonth, futureMonth];
   }
 
-  const handleHoverDay = useCallback(date => {
+  const handleHoverDay = useCallback((date) => {
     setDayValue(date);
   }, []);
 
   useEffect(() => {
     if (containerRef.current) {
       const style = window.getComputedStyle(containerRef.current);
-      const _translateAmount = singleCalendar ? containerRef.current.offsetWidth + parseInt(style.marginLeft) - 8 : containerRef.current.offsetWidth / 2;
+      const _translateAmount = singleCalendar
+        ? containerRef.current.offsetWidth + parseInt(style.marginLeft) - 8
+        : containerRef.current.offsetWidth / 2;
       setWrapperWidth(_translateAmount);
     }
   }, [containerRef.current]);
@@ -67,13 +67,19 @@ const DialogContentDesktop = ({
   }, [complsOpen]);
 
   useEffect(() => {
-    if (minDate && focusDate.isBefore(dayjs(minDate).add(1, 'month'), 'month')) {
+    if (
+      minDate &&
+      focusDate.isBefore(dayjs(minDate).add(1, "month"), "month")
+    ) {
       setDisablePrev(true);
     } else {
       setDisablePrev(false);
     }
 
-    if (maxDate && focusDate.isAfter(dayjs(maxDate).subtract(2, 'month'), 'month')) {
+    if (
+      maxDate &&
+      focusDate.isAfter(dayjs(maxDate).subtract(2, "month"), "month")
+    ) {
       setDisableNext(true);
     } else {
       setDisableNext(false);
@@ -87,7 +93,7 @@ const DialogContentDesktop = ({
     if (dayjs.isDayjs(date)) {
       setFocusDate(date);
     } else {
-      const nextDate = dayjs(focusDate).add(1, 'month');
+      const nextDate = dayjs(focusDate).add(1, "month");
       setFocusDate(nextDate);
     }
   }
@@ -96,7 +102,7 @@ const DialogContentDesktop = ({
     if (dayjs.isDayjs(date)) {
       setFocusDate(date);
     } else {
-      const prevDate = dayjs(focusDate).subtract(1, 'month');
+      const prevDate = dayjs(focusDate).subtract(1, "month");
       setFocusDate(prevDate);
     }
   }
@@ -123,11 +129,13 @@ const DialogContentDesktop = ({
 
   useEffect(() => {
     if (dateChanged) {
-      if (dayjs(dateChanged).isBefore(focusDate, 'month', true)) {
+      if (dayjs(dateChanged).isBefore(focusDate, "month", true)) {
         decreaseCurrentMonth(dateChanged);
       }
-      if (dayjs(dateChanged).isAfter(focusDate.add(1, 'month'), 'month', true)) {
-        increaseCurrentMonth(dayjs(dateChanged).subtract(1, 'month'));
+      if (
+        dayjs(dateChanged).isAfter(focusDate.add(1, "month"), "month", true)
+      ) {
+        increaseCurrentMonth(dayjs(dateChanged).subtract(1, "month"));
       }
     }
   }, [dateChanged]);
@@ -152,10 +160,10 @@ const DialogContentDesktop = ({
 
   function focusOnCalendar() {
     if (containerRef && containerRef.current) {
-      let selectedButton = containerRef.current.querySelector('.day.selected');
+      let selectedButton = containerRef.current.querySelector(".day.selected");
       if (!selectedButton) {
         selectedButton = containerRef.current.querySelector(
-          '.month-calendar:not(.hidden) .day:not(.disabled)',
+          ".month-calendar:not(.hidden) .day:not(.disabled)"
         );
       }
       if (selectedButton) {
@@ -167,27 +175,29 @@ const DialogContentDesktop = ({
   function onKeyDown(e) {
     const allowKeyCodes = [9, 32, 37, 38, 39, 40];
     if (
-      allowKeyCodes.indexOf(e.keyCode) === -1
-      || !e.target.getAttribute('data-day-index')
+      allowKeyCodes.indexOf(e.keyCode) === -1 ||
+      !e.target.getAttribute("data-day-index")
     ) {
       return true;
     }
 
     e.preventDefault();
 
-    const calendarContainer = e.target.parentElement.parentElement.parentElement.parentElement;
-    const dayIndex = parseInt(e.target.getAttribute('data-day-index'));
-    const dateValue = parseInt(e.target.getAttribute('data-date-value'));
+    const calendarContainer =
+      e.target.parentElement.parentElement.parentElement.parentElement;
+    const dayIndex = parseInt(e.target.getAttribute("data-day-index"));
+    const dateValue = parseInt(e.target.getAttribute("data-date-value"));
     const date = dayjs(dateValue);
-    const lastDateOfMonth = date.add(1, 'month').set('date', 0).get('date');
+    const lastDateOfMonth = date.add(1, "month").set("date", 0).get("date");
     let nextDayIndex = -1;
     let increaseAmount = 0;
 
     switch (e.keyCode) {
       case 9: {
-        const doneButton = calendarContainer.parentElement.parentElement.parentElement.querySelector(
-          '.submit-button',
-        );
+        const doneButton =
+          calendarContainer.parentElement.parentElement.parentElement.querySelector(
+            ".submit-button"
+          );
         if (doneButton) {
           doneButton.focus();
 
@@ -217,31 +227,31 @@ const DialogContentDesktop = ({
     nextDayIndex = dayIndex + increaseAmount;
     if (nextDayIndex > 0 && nextDayIndex <= lastDateOfMonth) {
       const selector = `.day[data-day-index="${nextDayIndex}"]`;
-      const dayElement = e.target.parentElement.parentElement.querySelector(
-        selector,
-      );
+      const dayElement =
+        e.target.parentElement.parentElement.querySelector(selector);
       if (dayElement) {
         dayElement.focus();
       }
     } else {
-      const nextDate = date.add(increaseAmount, 'day');
+      const nextDate = date.add(increaseAmount, "day");
 
       if (
-        increaseAmount > 0
-        && Math.ceil(nextDate.diff(focusDate, 'month', true)) > 1
+        increaseAmount > 0 &&
+        Math.ceil(nextDate.diff(focusDate, "month", true)) > 1
       ) {
-        if (maxDate && dayjs(nextDate).isAfter(maxDate, 'month')) return false;
+        if (maxDate && dayjs(nextDate).isAfter(maxDate, "month")) return false;
         increaseCurrentMonth();
       } else if (
-        increaseAmount < 0
-        && Math.ceil(focusDate.diff(nextDate, 'month', true)) > 0
+        increaseAmount < 0 &&
+        Math.ceil(focusDate.diff(nextDate, "month", true)) > 0
       ) {
-        if (minDate && dayjs(nextDate).isBefore(minDate, 'month')) return false;
+        if (minDate && dayjs(nextDate).isBefore(minDate, "month")) return false;
         decreaseCurrentMonth();
       }
       setTimeout(() => {
-        const query = `.month-calendar[data-month-index="${nextDate.get('month')
-          + 1}"] .day[data-day-index="${nextDate.get('date')}"]`;
+        const query = `.month-calendar[data-month-index="${
+          nextDate.get("month") + 1
+        }"] .day[data-day-index="${nextDate.get("date")}"]`;
         const dayElement = calendarContainer.querySelector(query);
         if (dayElement) {
           dayElement.focus();
@@ -259,8 +269,8 @@ const DialogContentDesktop = ({
         key={dateIndex}
         hidden={dateIndex === 0 && translateAmount <= 0}
         isAnimating={dateIndex === 0 && translateAmount > 0}
-        month={dayjs(date).get('month')}
-        year={dayjs(date).get('year')}
+        month={dayjs(date).get("month")}
+        year={dayjs(date).get("year")}
         onSelectDate={onSelectDate}
         onHoverDate={onHoverDate}
         fromDate={fromDate}
@@ -282,17 +292,23 @@ const DialogContentDesktop = ({
   }
 
   return (
-    <div style={{ position: 'relative' }}>
-      {tooltip && <div id="day-tooltip" className="tooltip-text" ref={tooltipRef}>{typeof tooltip === 'function' ? tooltip(dayValue.$d ? new Date(dayValue.$d) : new Date()) : tooltip}</div>}
+    <div style={{ position: "relative" }}>
+      {tooltip && (
+        <div id="day-tooltip" className="tooltip-text" ref={tooltipRef}>
+          {typeof tooltip === "function"
+            ? tooltip(dayValue.$d ? new Date(dayValue.$d) : new Date())
+            : tooltip}
+        </div>
+      )}
       <div
-        className={cx('calendar-wrapper', {
+        className={cx("calendar-wrapper", {
           single: singleCalendar,
         })}
         ref={containerRef}
         onKeyDown={onKeyDown}
       >
         <div
-          className={cx('calendar-content', {
+          className={cx("calendar-content", {
             isAnimating: translateAmount !== 0,
             single: singleCalendar,
           })}
@@ -304,7 +320,7 @@ const DialogContentDesktop = ({
         </div>
         <div className="calendar-flippers">
           <div
-            className={cx('flipper-button', { disabled: disablePrev })}
+            className={cx("flipper-button", { disabled: disablePrev })}
             onClick={decreaseCurrentMonth}
             onKeyDown={onBackButtonKeyDown}
             role="button"
@@ -313,7 +329,7 @@ const DialogContentDesktop = ({
             <PrevIcon viewBox="0 0 24 24" />
           </div>
           <div
-            className={cx('flipper-button', { disabled: disableNext })}
+            className={cx("flipper-button", { disabled: disableNext })}
             onClick={increaseCurrentMonth}
             onKeyDown={onNextButtonKeyDown}
             role="button"
@@ -349,27 +365,7 @@ DialogContentDesktop.propTypes = {
     PropTypes.node,
     PropTypes.func,
   ]),
-  subTextDict: PropTypes.object
-};
-
-DialogContentDesktop.defaultProps = {
-  fromDate: null,
-  toDate: null,
-  hoverDate: null,
-  onSelectDate: () => {},
-  onHoverDate: () => {},
-  startWeekDay: null,
-  minDate: null,
-  maxDate: null,
-  monthFormat: '',
-  isSingle: false,
-  complsOpen: false,
-  dateChanged: null,
-  highlightToday: false,
-  singleCalendar: false,
-  weekDayFormat: '',
-  tooltip: '',
-  subTextDict: null,
+  subTextDict: PropTypes.object,
 };
 
 export default DialogContentDesktop;

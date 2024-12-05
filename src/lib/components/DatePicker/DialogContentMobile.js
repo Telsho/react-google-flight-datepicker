@@ -8,20 +8,20 @@ import MonthCalendar from './MonthCalendar';
 import { getMonthInfo, getWeekDay } from '../../helpers';
 
 const DialogContentMobile = ({
-  fromDate,
-  toDate,
-  hoverDate,
-  onSelectDate,
-  startWeekDay,
-  minDate,
-  maxDate,
-  monthFormat,
-  weekDayFormat,
-  complsOpen,
-  isSingle,
-  highlightToday,
-  tooltip,
-  subTextDict
+  fromDate = null,
+  toDate = null,
+  hoverDate = null,
+  onSelectDate = () => {},
+  startWeekDay = null,
+  minDate = null,
+  maxDate = null,
+  monthFormat = '',
+  complsOpen = false,
+  isSingle = false,
+  highlightToday = false,
+  weekDayFormat = '',
+  tooltip = '',
+  subTextDict = null
 }) => {
   const [rowCount, setRowCount] = useState(2400);
   const minYear = minDate ? dayjs(minDate).year() : 1900;
@@ -149,21 +149,5 @@ DialogContentMobile.propTypes = {
   subTextDict: PropTypes.object
 };
 
-DialogContentMobile.defaultProps = {
-  fromDate: null,
-  toDate: null,
-  hoverDate: null,
-  onSelectDate: () => {},
-  startWeekDay: null,
-  minDate: null,
-  maxDate: null,
-  monthFormat: '',
-  complsOpen: false,
-  isSingle: false,
-  highlightToday: false,
-  weekDayFormat: '',
-  tooltip: '',
-  subTextDict: null
-};
 
 export default DialogContentMobile;

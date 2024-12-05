@@ -49,7 +49,7 @@ const Day = forwardRef(
     }, []);
 
     const handleTooltipHidden = useCallback(() => {
-      const element = ref.current;
+      const element = ref?.current;
       if (element) {
         element.style.visibility = "hidden";
       }

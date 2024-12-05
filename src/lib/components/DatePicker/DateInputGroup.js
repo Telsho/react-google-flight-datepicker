@@ -6,21 +6,21 @@ import DateInput from './DateInput';
 import CalendarIcon from '../../assets/svg/calendar.svg';
 
 const DateInputGroup = ({
-  showCalendarIcon,
-  inputFocus,
-  handleClickDateInput,
-  fromDate,
-  toDate,
-  minDate,
-  maxDate,
-  handleChangeDate,
-  startDatePlaceholder,
-  endDatePlaceholder,
-  dateFormat,
-  isSingle,
-  onFocus,
-  nonFocusable,
-  dateInputSeperator,
+  handleClickDateInput = () => {},
+  showCalendarIcon = false,
+  inputFocus = null,
+  fromDate = null,
+  toDate = null,
+  minDate = null,
+  maxDate = null,
+  handleChangeDate = () => {},
+  startDatePlaceholder = null,
+  endDatePlaceholder = null,
+  dateFormat = '',
+  isSingle = false,
+  onFocus = () => {},
+  nonFocusable = false,
+  dateInputSeperator = null,
 }) => {
   function handleClickFromInput() {
     handleClickDateInput('from');
@@ -109,24 +109,6 @@ DateInputGroup.propTypes = {
   onFocus: PropTypes.func,
   nonFocusable: PropTypes.bool,
   dateInputSeperator: PropTypes.node,
-};
-
-DateInputGroup.defaultProps = {
-  handleClickDateInput: () => {},
-  showCalendarIcon: false,
-  inputFocus: null,
-  fromDate: null,
-  toDate: null,
-  minDate: null,
-  maxDate: null,
-  handleChangeDate: () => {},
-  startDatePlaceholder: null,
-  endDatePlaceholder: null,
-  dateFormat: '',
-  isSingle: false,
-  onFocus: () => {},
-  nonFocusable: false,
-  dateInputSeperator: null,
 };
 
 export default DateInputGroup;

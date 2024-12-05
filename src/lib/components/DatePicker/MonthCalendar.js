@@ -7,25 +7,25 @@ import Week from './Week';
 import { getMonthInfo, getWeekDay } from '../../helpers';
 
 const MonthCalendar = forwardRef(({
-  hidden,
-  month,
-  year,
-  onSelectDate,
-  onHoverDate,
-  fromDate,
-  toDate,
-  hoverDate,
-  isAnimating,
-  startWeekDay,
-  minDate,
-  maxDate,
-  monthFormat,
-  weekDayFormat,
-  isSingle,
-  highlightToday,
-  singleCalendar,
-  handleHoverDay,
-  subTextDict
+  month= null,
+  year= null,
+  onSelectDate= () => {},
+  onHoverDate= () => {},
+  fromDate= null,
+  toDate= null,
+  hoverDate= null,
+  hidden= false,
+  isAnimating= false,
+  startWeekDay= null,
+  weekDayFormat= '',
+  minDate= null,
+  maxDate= null,
+  monthFormat= '',
+  isSingle= false,
+  highlightToday= false,
+  singleCalendar= false,
+  handleHoverDay= () => {},
+  subTextDict= null
 }, ref) => {
   function generateWeek() {
     const { totalWeek, totalDay } = getMonthInfo(year, month, startWeekDay);
@@ -110,27 +110,4 @@ MonthCalendar.propTypes = {
   handleHoverDay: PropTypes.func,
   subTextDict: PropTypes.object
 };
-
-MonthCalendar.defaultProps = {
-  month: null,
-  year: null,
-  onSelectDate: () => {},
-  onHoverDate: () => {},
-  fromDate: null,
-  toDate: null,
-  hoverDate: null,
-  hidden: false,
-  isAnimating: false,
-  startWeekDay: null,
-  weekDayFormat: '',
-  minDate: null,
-  maxDate: null,
-  monthFormat: '',
-  isSingle: false,
-  highlightToday: false,
-  singleCalendar: false,
-  handleHoverDay: () => {},
-  subTextDict: null
-};
-
 export default MonthCalendar;

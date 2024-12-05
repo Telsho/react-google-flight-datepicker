@@ -9,23 +9,23 @@ import Day from "./Day";
 const Week = forwardRef(
   (
     {
-      isFirst,
-      week,
-      month,
-      year,
-      fromDate,
-      toDate,
-      hoverDate,
-      onSelectDate,
-      onHoverDate,
-      totalDay,
-      minDate,
-      maxDate,
-      isSingle,
-      weekIndex,
-      highlightToday,
-      handleHoverDay,
-      subTextDict,
+      isFirst = false,
+      week = {},
+      month = null,
+      year = null,
+      fromDate = null,
+      toDate = null,
+      totalDay = null,
+      hoverDate = null,
+      onSelectDate = () => {},
+      onHoverDate = () => {},
+      minDate = null,
+      maxDate = null,
+      isSingle = false,
+      weekIndex = 0,
+      highlightToday = false,
+      handleHoverDay = () => {},
+      subTextDict = null,
     },
     ref
   ) => {
@@ -124,24 +124,5 @@ Week.propTypes = {
   subTextDict: PropTypes.object,
 };
 
-Week.defaultProps = {
-  isFirst: false,
-  week: {},
-  month: null,
-  year: null,
-  fromDate: null,
-  toDate: null,
-  totalDay: null,
-  hoverDate: null,
-  onSelectDate: () => {},
-  onHoverDate: () => {},
-  minDate: null,
-  maxDate: null,
-  isSingle: false,
-  weekIndex: 0,
-  highlightToday: false,
-  handleHoverDay: () => {},
-  subTextDict: null,
-};
 
 export default Week;
