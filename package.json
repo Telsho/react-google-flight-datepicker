@@ -1,6 +1,6 @@
 {
   "name": "react-google-flight-datepicker",
-  "version": "0.1.19",
+  "version": "1.0.0",
   "dependencies": {
     "classnames": "^2.3.2",
     "dayjs": "^1.11.10",
