@@ -81,10 +81,13 @@ endDatePlaceholder | String | End Date | Placeholder text for endDate text input
 startWeekDay | String (monday or sunday) | monday | Determine the start day for a week (monday or sunday) |
 highlightToday | Bool | false | Hightlight "today" date
 singleCalendar | Bool | false | Only applicable on SingleDatePicker. When this prop is actived, the datepicker will display 1 calendar instead of 2 calendar in the the container
-tooltip | String, React Component, Function | Display the tooltip when hovering on day element, you can pass string, component, or a function. The function will receive a Date object, so you can generate the content of tooltip.
+tooltip | String, React Component, Function | | Display the tooltip when hovering on day element, you can pass string, component, or a function. The function will receive a Date object, so you can generate the content of tooltip.
+subTextDict | Dict | null | Each key of the dict is a date in format YYYY-MM-DD, and the value is the text you want to display. You can see an example in dev/index.js. The text shouldn't be too big
+expandDirection | String | "right" | if "right" the calendar will expand from the top left to the right if "left" it will expand from the top right to the left
 
 ### Author
 - David Tran - david@jslancer.com
+- Elias Thouant 
 
 ### License
 MIT
