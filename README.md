@@ -1,6 +1,4 @@
 # react-google-flight-datepicker
-[![dependency status][deps-svg]][deps-url]
-[![dev dependency status][dev-deps-svg]][dev-deps-url]
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Downloads][downloads-image]][downloads-url]
 
@@ -16,10 +14,10 @@ Google flight date picker implemented in ReactJS
 ### Screenshot
 
 
-####Desktop
+#### Desktop
 <video src="https://user-images.githubusercontent.com/1154740/199437644-560147f6-82db-4736-8ff9-fb6747a460a9.mov" width="500" autoplay></video>
 ----
-####Mobile
+#### Mobile
 <video autoplay src="https://user-images.githubusercontent.com/1154740/199439704-c8cdb7db-8a6b-4f66-a3e0-f4b1f1fde10d.MOV" width="500"></video>
 
 ### Usage
