@@ -9,6 +9,9 @@ import './styles.scss';
 import DateInputGroup from './DateInputGroup';
 import DialogWrapper from './DialogWrapper';
 import Dialog from './Dialog';
+import localeData from 'dayjs/plugin/localeData';
+
+dayjs.extend(localeData);
 
 const RangeDatePicker = ({
   startDate = null,
@@ -34,8 +37,24 @@ const RangeDatePicker = ({
   onCloseCalendar = () => {},
   tooltip = '',
   subTextDict = null,
-  expandDirection = "right"
+  expandDirection = "right",
+  locale = "en"
 }) => {
+
+  useEffect(() => {
+    if (locale !== 'en') {
+      import(`dayjs/locale/${locale}`)
+        .then(() => {
+          dayjs.locale(locale);
+          console.log('Current locale:', dayjs.locale());
+        })
+        .catch(error => {
+          console.error('Failed to load locale:', error);
+          dayjs.locale('en');
+        });
+    }
+  }, [locale]);
+  
   const [complsOpen, setComplsOpen] = useState(false);
   const containerRef = useRef(null);
   const [inputFocus, setInputFocus] = useState('from');
@@ -46,6 +65,7 @@ const RangeDatePicker = ({
   const [hoverDate, setHoverDate] = useState();
   const [isFirstTime, setIsFirstTime] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
 
   function handleResize() {
     if (typeof window !== 'undefined' && window.innerWidth < 768) {
@@ -302,7 +322,8 @@ RangeDatePicker.propTypes = {
     PropTypes.func,
   ]),
   subTextDict: PropTypes.object,
-  expandDirection: PropTypes.string
+  expandDirection: PropTypes.string,
+  locale: PropTypes.string
 };
 
 export default RangeDatePicker;

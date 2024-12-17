@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export function getMonthInfo(year, month, startDay) {
   const weeks = [];
   const firstDate = new Date(year, month, 1);
@@ -23,17 +25,18 @@ export function getMonthInfo(year, month, startDay) {
 }
 
 export function getWeekDay(startWeekDay, weekDayFormat) {
-  const arrWeekDay = weekDayFormat === 'dd' ? ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
-    : weekDayFormat === 'ddd' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const days = [...Array(7)].map((_, i) => 
+    dayjs().day(i).format(weekDayFormat === 'dd' ? 'dd' : 
+                         weekDayFormat === 'ddd' ? 'ddd' : 'dddd')
+  );
 
   if (startWeekDay === 'sunday') {
-    const last = arrWeekDay.pop();
-    arrWeekDay.unshift(last);
+    const last = days.pop();
+    days.unshift(last);
   }
-
-  return arrWeekDay;
+  console.log(dayjs.locale())
+  return days;
 }
-
 export function debounce(func, wait) {
   let timeout;
 

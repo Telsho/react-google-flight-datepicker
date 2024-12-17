@@ -1,6 +1,6 @@
+// DateInputGroup.js
 import React from 'react';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 
 import DateInput from './DateInput';
 import CalendarIcon from '../../assets/svg/calendar.svg';
@@ -32,10 +32,9 @@ const DateInputGroup = ({
 
   function getDateFromValue(action, value) {
     if (action === 'prev') {
-      return dayjs(value).subtract(1, 'day');
+      return value.subtract(1, 'day');
     }
-
-    return dayjs(value).add(1, 'day');
+    return value.add(1, 'day');
   }
 
   function handleChangeFromDate(action, value) {
@@ -50,8 +49,8 @@ const DateInputGroup = ({
 
   return (
     <div className="date-picker-input">
-      {showCalendarIcon
-        && <CalendarIcon className="icon-calendar mobile" viewBox="0 0 24 24" />}
+      {showCalendarIcon && 
+        <CalendarIcon className="icon-calendar mobile" viewBox="0 0 24 24" />}
       <div className="date-picker-date-group">
         <DateInput
           handleClickDateInput={handleClickFromInput}
@@ -69,10 +68,9 @@ const DateInputGroup = ({
           minDate={minDate}
           maxDate={maxDate}
         />
-        {!isSingle && dateInputSeperator
-          && <div className="date-input-separator">{dateInputSeperator}</div>}
-        {!isSingle
-        && (
+        {!isSingle && dateInputSeperator && 
+          <div className="date-input-separator">{dateInputSeperator}</div>}
+        {!isSingle && (
           <DateInput
             handleClickDateInput={handleClickToInput}
             tabIndex="0"
@@ -97,10 +95,22 @@ DateInputGroup.propTypes = {
   handleClickDateInput: PropTypes.func,
   showCalendarIcon: PropTypes.bool,
   inputFocus: PropTypes.string,
-  fromDate: PropTypes.instanceOf(Date),
-  toDate: PropTypes.instanceOf(Date),
-  minDate: PropTypes.instanceOf(Date),
-  maxDate: PropTypes.instanceOf(Date),
+  fromDate: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.oneOf([null])
+  ]),
+  toDate: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.oneOf([null])
+  ]),
+  minDate: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.oneOf([null])
+  ]),
+  maxDate: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.oneOf([null])
+  ]),
   handleChangeDate: PropTypes.func,
   startDatePlaceholder: PropTypes.string,
   endDatePlaceholder: PropTypes.string,

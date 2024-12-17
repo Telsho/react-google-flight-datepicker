@@ -36,6 +36,15 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.d\.ts$/,
+        use: 'ignore-loader'
+      },
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: 'ignore-loader'
+      },
+      {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
@@ -78,7 +87,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts'],
     alias: {
       'react-svg-loader': '@svgr/webpack'
     }

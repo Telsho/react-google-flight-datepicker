@@ -1,3 +1,4 @@
+// DateInput.js
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -37,7 +38,7 @@ const DateInput = ({
       setFormattedDate(text);
 
       if ((minDate && dayjs(minDate).add(1, 'day').isAfter(value, 'date'))
-        || (name === 'END_DATE' && value.isBefore(fromDate.add(1, 'day'), 'date'))
+        || (name === 'END_DATE' && fromDate && value.isBefore(fromDate.add(1, 'day'), 'date'))
       ) {
         setDisablePrev(true);
       } else {
@@ -115,7 +116,10 @@ DateInput.propTypes = {
   showIcon: PropTypes.bool,
   tabIndex: PropTypes.string,
   isFocus: PropTypes.bool,
-  value: PropTypes.instanceOf(Date),
+  value: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.oneOf([null])
+  ]),
   placeholder: PropTypes.string,
   handleChangeDate: PropTypes.func,
   dateFormat: PropTypes.string,
@@ -123,9 +127,18 @@ DateInput.propTypes = {
   onFocus: PropTypes.func,
   name: PropTypes.string,
   nonFocusable: PropTypes.bool,
-  fromDate: PropTypes.instanceOf(Date),
-  minDate: PropTypes.instanceOf(Date),
-  maxDate: PropTypes.instanceOf(Date),
+  fromDate: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.oneOf([null])
+  ]),
+  minDate: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.oneOf([null])
+  ]),
+  maxDate: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.oneOf([null])
+  ])
 };
 
 export default DateInput;
