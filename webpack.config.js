@@ -7,7 +7,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
-  entry: isProduction ? './src/lib/index.js' : './src/dev/index.js',
+  entry: isProduction ? './src/lib/index.ts' : './src/dev/index.tsx',
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
@@ -32,17 +32,48 @@ module.exports = {
       amd: 'react-dom',
       umd: 'react-dom',
     },
+    dayjs: {
+      commonjs: 'dayjs',
+      commonjs2: 'dayjs',
+      amd: 'dayjs',
+      root: 'dayjs'
+    }
   } : {},
   module: {
     rules: [
       {
-        test: /\.d\.ts$/,
-        use: 'ignore-loader'
+        test: /dayjs[/\\]locale/,
+        type: 'javascript/auto',
+        include: /node_modules/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            cacheDirectory: true,
+          }
+        }]
       },
       {
-        test: /\.ts$/,
+        test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
-        use: 'ignore-loader'
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                '@babel/preset-env',
+                ['@babel/preset-react', { runtime: 'automatic' }],
+                '@babel/preset-typescript'
+              ],
+              plugins: [
+                '@babel/plugin-proposal-class-properties',
+                '@babel/plugin-proposal-object-rest-spread'
+              ],
+              cacheDirectory: true,
+              cacheCompression: false,
+            }
+          }
+        ]
       },
       {
         test: /\.(js|jsx)$/,
@@ -87,13 +118,36 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.ts'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
     alias: {
       'react-svg-loader': '@svgr/webpack'
+    },
+    fallback: {
+      path: false,
+      fs: false
     }
   },
   optimization: {
-    minimizer: [new TerserPlugin()],
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          parse: {
+            ecma: 8,
+          },
+          compress: {
+            ecma: 5,
+            warnings: false,
+            comparisons: false,
+            inline: 2,
+          },
+          output: {
+            ecma: 5,
+            comments: false,
+            ascii_only: true,
+          },
+        },
+      })
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin({
@@ -102,7 +156,11 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: process.env.NODE_ENV || 'development',
       BABEL_ENV: process.env.BABEL_ENV || 'development'
-    })
+    }),
+    new webpack.ContextReplacementPlugin(
+      /dayjs[/\\]locale$/,
+      /\.(js|json)$/
+    )
   ],
   devServer: {
     static: {
