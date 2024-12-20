@@ -49,7 +49,6 @@ export const DateInput: React.FC<DateInputProps> = ({
 
   const value = type === 'from' ? fromDate : toDate;
   const placeholder = type === 'from' ? startDatePlaceholder : endDatePlaceholder;
-  const name = type === 'from' ? 'START_DATE' : 'END_DATE';
 
   useEffect(() => {
     if (value) {
@@ -62,7 +61,7 @@ export const DateInput: React.FC<DateInputProps> = ({
       const minDateDayjs = minDate ? dayjs(minDate) : null;
       const maxDateDayjs = maxDate ? dayjs(maxDate) : null;
 
-      if ((minDateDayjs && minDateDayjs.add(1, 'day').isAfter(value, 'date'))
+      if ((minDateDayjs?.add(1, 'day').isAfter(value, 'date'))
         || (type === 'to' && fromDate && value.isBefore(fromDate.add(1, 'day'), 'date'))
       ) {
         setDisablePrev(true);
@@ -70,7 +69,7 @@ export const DateInput: React.FC<DateInputProps> = ({
         setDisablePrev(false);
       }
 
-      if (maxDateDayjs && maxDateDayjs.subtract(1, 'day').isBefore(value, 'date')) {
+      if (maxDateDayjs?.subtract(1, 'day').isBefore(value, 'date')) {
         setDisableNext(true);
       } else {
         setDisableNext(false);
@@ -83,14 +82,14 @@ export const DateInput: React.FC<DateInputProps> = ({
   const prevDate = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (value) {
-      handleChangeDate(value, type);
+      handleChangeDate(value.subtract(1, 'day'), type);
     }
   };
 
   const nextDate = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (value) {
-      handleChangeDate(value, type);
+      handleChangeDate(value.add(1, 'day'), type);
     }
   };
 
@@ -114,7 +113,7 @@ export const DateInput: React.FC<DateInputProps> = ({
       )}
 
       <div className="selected-date">
-        {formattedDate || <div className="date-placeholder">{placeholder}</div>}
+        {formattedDate ?? <div className="date-placeholder">{placeholder}</div>}
       </div>
       
       {formattedDate && (
