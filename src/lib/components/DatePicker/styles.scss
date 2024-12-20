@@ -306,7 +306,7 @@
     padding: 0 2px;
     position: relative;
     overflow: hidden;
-
+  
     &.isAnimating {
       transition: transform 0.2s ease;
       overflow: initial;
@@ -317,21 +317,29 @@
     width: 308px;
     color: #3c4043;
     margin-right: 43px;
-
+  
     &.hidden {
       position: absolute;
       visibility: hidden;
       z-index: -1;
       opacity: 0;
     }
-
+  
     &.isAnimating {
       position: absolute;
       left: -350px;
     }
-    
-    &.single {
-      margin-right: 39px;
+
+    .month-calendar {
+      &.slide-next {
+        position: absolute;
+        left: 350px;
+      }
+      
+      &.slide-prev {
+        position: absolute;
+        left: -350px;
+      }
     }
   }
 
@@ -552,21 +560,28 @@
     align-items: center;
     margin: 0 -20px;
     pointer-events: all;
+    border: none; 
+    outline: none; 
+
+    &:focus:hover {
+        outline: none;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.12), 0 4px 4px rgba(0, 0, 0, 0.24),
+                    0 0 0 2px rgba(0, 0, 0, 0.1); 
+    }
 
     svg {
-      width: 24px;
-      height: 24px;
+        width: 24px;
+        height: 24px;
     }
 
     &.disabled {
-      cursor: default;
+        cursor: default;
 
-      svg {
-        fill: #93989e
-      }
+        svg {
+            fill: #93989e;
+        }
     }
-  }
-
+}
   .dialog-footer {
     align-items: center;
     display: flex;

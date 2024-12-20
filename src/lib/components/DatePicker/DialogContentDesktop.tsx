@@ -1,4 +1,9 @@
-import React, { useEffect, useState, useRef, useCallback,  KeyboardEvent as ReactKeyboardEvent } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import cx from "classnames";
 import dayjs, { Dayjs } from "dayjs";
 import {
@@ -15,10 +20,6 @@ interface DialogContentDesktopProps {
   dateChanged?: Dayjs | null;
 }
 
-interface KeyboardEvent extends React.KeyboardEvent {
-  target: HTMLElement;
-}
-
 export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
   dateChanged = null,
 }) => {
@@ -31,98 +32,114 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
   const [disableNext, setDisableNext] = useState<boolean>(false);
   const [wrapperWidth, setWrapperWidth] = useState<number>(0);
   const [dayValue, setDayValue] = useState<Dayjs | null>(null);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   const { fromDate } = useDateState();
   const { minDate, maxDate, singleCalendar } = useDatePickerConfig();
   const { complsOpen } = useUIState();
   const { tooltip } = useDisplayCustomization();
 
-  const getArrayMonth = (date: Dayjs, useSingleCalendar?: boolean): Dayjs[] => {
-    const prevMonth = dayjs(date).subtract(1, "month");
-    const nextMonth = dayjs(date).add(1, "month");
-    const futureMonth = dayjs(date).add(2, "month");
-
-    return useSingleCalendar 
-      ? [prevMonth, focusDate, nextMonth]
-      : [prevMonth, focusDate, nextMonth, futureMonth];
+  const getArrayMonth = (date: Dayjs): Dayjs[] => {
+    return [
+      dayjs(date).subtract(1, "month"),
+      date,
+      dayjs(date).add(1, "month"),
+      dayjs(date).add(2, "month"),
+    ];
   };
 
-  const handleHoverDay = useCallback((e: React.MouseEvent, date: number) => {
+  const handleHoverDay = useCallback((date: Dayjs) => {
     setDayValue(dayjs(date));
   }, []);
 
-  const handleMonthChange = (direction: 'next' | 'prev') => (date?: Dayjs): void => {
-    const isDisabled = direction === 'next' ? disableNext : disablePrev;
-    if (isDisabled) return;
+  const handleMonthChange = (direction: "next" | "prev") => (): void => {
+    const isDisabled = direction === "next" ? disableNext : disablePrev;
+    if (isDisabled || isAnimating) return;
 
-    const translateValue = direction === 'next' ? -wrapperWidth : wrapperWidth;
-    setTranslateAmount(translateValue);
-    
+    setIsAnimating(true);
+
+    // We need a slight delay to ensure the isAnimating class is applied before the transform
+    requestAnimationFrame(() => {
+      const translateValue = direction === "next" ? -wrapperWidth : wrapperWidth;
+      setTranslateAmount(translateValue);
+    });
+
+    // Wait for the animation to complete before updating the data
     setTimeout(() => {
-      if (direction === 'next') {
-        setFocusDate(date ?? dayjs(focusDate).add(1, "month"));
-      } else {
-        setFocusDate(date ?? dayjs(focusDate).subtract(1, "month"));
-      }
+      const newFocusDate = direction === "next"
+        ? dayjs(focusDate).add(1, "month")
+        : dayjs(focusDate).subtract(1, "month");
+      
+      setFocusDate(newFocusDate);
+      setMonthArray(getArrayMonth(newFocusDate));
       setTranslateAmount(0);
+      setIsAnimating(false);
     }, 200);
   };
 
-  const increaseCurrentMonth = handleMonthChange('next');
-  const decreaseCurrentMonth = handleMonthChange('prev');
+  const increaseCurrentMonth = handleMonthChange("next");
+  const decreaseCurrentMonth = handleMonthChange("prev");
 
   const focusOnCalendar = (): void => {
-    const selectedButton = containerRef.current?.querySelector<HTMLElement>(".day.selected") ??
-      containerRef.current?.querySelector<HTMLElement>(".month-calendar:not(.hidden) .day:not(.disabled)");
-    
+    const selectedButton =
+      containerRef.current?.querySelector<HTMLElement>(".day.selected") ??
+      containerRef.current?.querySelector<HTMLElement>(
+        ".month-calendar:not(.hidden) .day:not(.disabled)"
+      );
+
     selectedButton?.focus();
   };
 
-  const handleKeyboardNavigation = (e: ReactKeyboardEvent<HTMLDivElement>): boolean => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
     const target = e.target as HTMLElement;
-    const allowedKeys = ['Tab', 'Space', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
+    const allowedKeys = [
+      "Tab",
+      "Space",
+      "ArrowLeft",
+      "ArrowUp",
+      "ArrowRight",
+      "ArrowDown",
+    ];
     const dayIndex = target.getAttribute("data-day-index");
-    
+
     if (!allowedKeys.includes(e.key) || !dayIndex) {
-      return true;
+      return;
     }
-  
+
     e.preventDefault();
-    
-    const calendarContainer = target.closest('.calendar-wrapper') as HTMLElement;
+
+    const calendarContainer = target.closest(
+      ".calendar-wrapper"
+    ) as HTMLElement;
     const dateValue = parseInt(target.getAttribute("data-date-value") ?? "0");
     const date = dayjs(dateValue);
     const lastDateOfMonth = date.add(1, "month").set("date", 0).get("date");
     const currentDayIndex = parseInt(dayIndex);
-    
+
     let nextDayIndex = currentDayIndex;
-  
+
     switch (e.key) {
-      case 'Tab': {
-        const dialogContent = calendarContainer.closest('.dialog-content') as HTMLElement;
-        const doneButton = dialogContent.querySelector<HTMLElement>(".submit-button");
-        doneButton?.focus();
-        return true;
-      }
-      case 'Space':
+      case "Tab":
+        return;
+      case "Space":
         target.click();
         break;
-      case 'ArrowLeft':
+      case "ArrowLeft":
         nextDayIndex = currentDayIndex - 1;
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         nextDayIndex = currentDayIndex - 7;
         break;
-      case 'ArrowRight':
+      case "ArrowRight":
         nextDayIndex = currentDayIndex + 1;
         break;
-      case 'ArrowDown':
+      case "ArrowDown":
         nextDayIndex = currentDayIndex + 7;
         break;
     }
-  
+
     if (nextDayIndex > 0 && nextDayIndex <= lastDateOfMonth) {
-      const monthCalendar = target.closest('.month-calendar') as HTMLElement;
+      const monthCalendar = target.closest(".month-calendar") as HTMLElement;
       const nextDay = monthCalendar?.querySelector<HTMLElement>(
         `.day[data-day-index="${nextDayIndex}"]`
       );
@@ -130,15 +147,15 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
     } else {
       const nextDate = date.add(nextDayIndex - currentDayIndex, "day");
       const monthDiff = Math.ceil(nextDate.diff(focusDate, "month", true));
-  
+
       if (monthDiff > 1) {
-        if (maxDate && dayjs(nextDate).isAfter(maxDate, "month")) return false;
+        if (maxDate && dayjs(nextDate).isAfter(maxDate, "month")) return;
         increaseCurrentMonth();
       } else if (monthDiff < 0) {
-        if (minDate && dayjs(nextDate).isBefore(minDate, "month")) return false;
+        if (minDate && dayjs(nextDate).isBefore(minDate, "month")) return;
         decreaseCurrentMonth();
       }
-  
+
       setTimeout(() => {
         if (!calendarContainer) return;
         const query = `.month-calendar[data-month-index="${
@@ -148,12 +165,13 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
         nextElement?.focus();
       }, 200);
     }
-  
-    return false;
   };
 
-  const handleFunctionKey = (e: React.KeyboardEvent, action: () => void): void => {
-    if (e.key === 'Space' || e.key === 'Enter') {
+  const handleFunctionKey = (
+    e: React.KeyboardEvent,
+    action: () => void
+  ): void => {
+    if (e.key === "Space" || e.key === "Enter") {
       e.preventDefault();
       action();
     }
@@ -161,7 +179,9 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
 
   useEffect(() => {
     const width = containerRef.current?.offsetWidth ?? 0;
-    const style = window.getComputedStyle(containerRef.current ?? document.createElement('div'));
+    const style = window.getComputedStyle(
+      containerRef.current ?? document.createElement("div")
+    );
     const _translateAmount = singleCalendar
       ? width + parseInt(style.marginLeft) - 8
       : width / 2;
@@ -173,18 +193,27 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
   }, [complsOpen, fromDate]);
 
   useEffect(() => {
-    setDisablePrev(Boolean(minDate && focusDate.isBefore(dayjs(minDate).add(1, "month"), "month")));
-    setDisableNext(Boolean(maxDate && focusDate.isAfter(dayjs(maxDate).subtract(2, "month"), "month")));
-    setMonthArray(getArrayMonth(focusDate, singleCalendar));
-  }, [focusDate, minDate, maxDate, singleCalendar]);
+    setDisablePrev(
+      Boolean(
+        minDate && focusDate.isBefore(dayjs(minDate).add(1, "month"), "month")
+      )
+    );
+    setDisableNext(
+      Boolean(
+        maxDate &&
+          focusDate.isAfter(dayjs(maxDate).subtract(2, "month"), "month")
+      )
+    );
+    setMonthArray(getArrayMonth(focusDate));
+  }, [focusDate, minDate, maxDate]);
 
   useEffect(() => {
     if (!dateChanged) return;
-    
+
     if (dayjs(dateChanged).isBefore(focusDate, "month")) {
-      decreaseCurrentMonth(dateChanged);
+      decreaseCurrentMonth();
     } else if (dayjs(dateChanged).isAfter(focusDate.add(1, "month"), "month")) {
-      increaseCurrentMonth(dayjs(dateChanged).subtract(1, "month"));
+      increaseCurrentMonth();
     }
   }, [dateChanged, focusDate]);
 
@@ -197,35 +226,46 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
             : tooltip}
         </div>
       )}
-      <div
-        className={cx("calendar-wrapper", { single: singleCalendar })}
+      <div 
+        className={cx("calendar-wrapper", { single: singleCalendar })} 
         ref={containerRef}
-        onKeyDown={handleKeyboardNavigation}
+        onKeyDown={handleKeyDown}
+        role="grid"
+        aria-label="Calendar"
       >
         <div
-          className={cx("calendar-content", {
-            isAnimating: translateAmount !== 0,
-            single: singleCalendar,
-          })}
+          className={cx("calendar-content", { isAnimating })}
           style={{ transform: `translateX(${translateAmount}px)` }}
         >
-          {monthArray.map((date, dateIndex) => (
-            <MonthCalendar
-              key={dateIndex}
-              hidden={dateIndex === 0 && translateAmount <= 0}
-              isAnimating={dateIndex === 0 && translateAmount > 0}
-              month={date.get("month")}
-              year={date.get("year")}
-              handleHoverDay={handleHoverDay}
-              ref={tooltipRef}
-            />
-          ))}
+          {monthArray.map((date, index) => {
+            const monthKey = `${date.get("year")}-${date.get("month")}`;
+            const isVisible = index === 1 || index === 2;
+            const isSlidingNext = isAnimating && translateAmount < 0 && index === 3;
+            const isSlidingPrev = isAnimating && translateAmount > 0 && index === 0;
+            const isHidden = !isVisible && !isSlidingNext && !isSlidingPrev;
+
+            return (
+              <MonthCalendar
+                key={monthKey}
+                hidden={isHidden}
+                isAnimating={isSlidingNext || isSlidingPrev}
+                month={date.get("month")}
+                year={date.get("year")}
+                handleHoverDay={handleHoverDay}
+                ref={tooltipRef}
+                className={cx({
+                  'slide-next': isSlidingNext,
+                  'slide-prev': isSlidingPrev
+                })}
+              />
+            );
+          })}
         </div>
         <div className="calendar-flippers">
           <button
             className={cx("flipper-button", { disabled: disablePrev })}
-            onClick={() => decreaseCurrentMonth()}
-            onKeyDown={(e) => handleFunctionKey(e, () => decreaseCurrentMonth())}
+            onClick={decreaseCurrentMonth}
+            onKeyDown={(e) => handleFunctionKey(e, decreaseCurrentMonth)}
             disabled={disablePrev}
             aria-label="Previous month"
           >
@@ -233,8 +273,8 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
           </button>
           <button
             className={cx("flipper-button", { disabled: disableNext })}
-            onClick={() => increaseCurrentMonth()}
-            onKeyDown={(e) => handleFunctionKey(e, () => increaseCurrentMonth())}
+            onClick={increaseCurrentMonth}
+            onKeyDown={(e) => handleFunctionKey(e, increaseCurrentMonth)}
             disabled={disableNext}
             aria-label="Next month"
             onBlur={focusOnCalendar}
