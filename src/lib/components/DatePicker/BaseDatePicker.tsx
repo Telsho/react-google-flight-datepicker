@@ -268,12 +268,12 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
     };
   
     const handleReset = (): void => {
-      setInputFocus(isSingle ? 'from' : null);
       setHoverDate(undefined);
       updateFromDate(null, true);
       if (!isSingle) {
         updateToDate(null, true);
       }
+      setInputFocus('from');
     };
   
     const handleChangeDate = (date: Dayjs, type: 'from' | 'to'): void => {
