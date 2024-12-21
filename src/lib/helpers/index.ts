@@ -58,7 +58,6 @@ export function getWeekDay(
     }
   }
   
-  console.log(dayjs.locale());
   return days;
 }
 
@@ -88,3 +87,15 @@ export function debounce<T extends (...args: any[]) => any>(
     timeout = setTimeout(later, wait);
   };
 }
+
+
+export const loadLocale = async (locale: string) => {
+  try {
+    if (locale === 'en') return true;
+    await import(`dayjs/locale/${locale}.js`);
+    return true;
+  } catch (error) {
+    console.error(`Failed to load locale ${locale}:`, error);
+    return false;
+  }
+};
