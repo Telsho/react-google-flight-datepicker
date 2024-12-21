@@ -27,7 +27,7 @@ export const DateInputGroup: React.FC<DateInputGroupProps> = ({
         <DateInput
           type="from"
           tabIndex={nonFocusable ? -1 : 0}
-          showIcon={showIcon}
+          showIcon={true}
           nonFocusable={nonFocusable}
         />
         {!isSingle && dateInputSeperator && (
@@ -37,7 +37,7 @@ export const DateInputGroup: React.FC<DateInputGroupProps> = ({
           <DateInput
             type="to"
             tabIndex={nonFocusable ? -1 : 0}
-            showIcon={showIcon}
+            showIcon={false}
             nonFocusable={nonFocusable}
           />
         )}

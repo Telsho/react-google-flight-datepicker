@@ -88,7 +88,7 @@ export const Dialog: React.FC<DialogContainerProps> = ({
           </button>
           
           <DateInputGroup
-            showIcon={false}
+            showIcon={true}
             nonFocusable={!complsOpen}
           />
           
