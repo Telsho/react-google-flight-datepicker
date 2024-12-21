@@ -52,7 +52,8 @@ export const DateInput: React.FC<DateInputProps> = ({
 
   useEffect(() => {
     if (value) {
-      let text = value.format('ddd, DD MMM');
+      let formattedValue = value.clone().locale(dayjs.locale());
+      let text = formattedValue.format('ddd, DD MMM');
       if (dateFormat) {
         text = value.format(dateFormat);
       }
