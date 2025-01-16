@@ -25,8 +25,6 @@ const App: React.FC = () => {
     [dayjs().add(11, 'day').format('YYYY-MM-DD')]: "940$",
   };
 
-  console.log(subTextDict);
-
   return (
     <div className="App">
       <h1>react-google-flight-datepicker</h1>
@@ -103,7 +101,7 @@ const App: React.FC = () => {
       <h2>Subtext</h2>
       <RangeDatePicker
         startDate={new Date()}
-        endDate={new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)} // Fixed date calculation
+        endDate={new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)}
         startDatePlaceholder="From"
         endDatePlaceholder="To"
         subTextDict={subTextDict}
@@ -113,20 +111,10 @@ const App: React.FC = () => {
       <h2>Left Expanding</h2>
       <RangeDatePicker
         startDate={new Date()}
-        endDate={new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)} // Fixed date calculation
+        endDate={new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)}
         startDatePlaceholder="From"
         endDatePlaceholder="To"
         expandDirection="left"
-      />
-      <br />
-
-      <h2>Custom locale</h2>
-      <RangeDatePicker
-        startDate={new Date()}
-        endDate={new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)} // Fixed date calculation
-        startDatePlaceholder="From"
-        endDatePlaceholder="To"
-        locale="fr"
       />
       <br />
     </div>
