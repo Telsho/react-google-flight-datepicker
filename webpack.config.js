@@ -2,6 +2,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const webpack = require("webpack");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -167,6 +168,11 @@ module.exports = {
       /dayjs[/\\]locale$/,
       new RegExp(`^\\.\\/(?!${["en"].join("|")}).*\\.js$`)
     ),
+    new CopyPlugin({
+      patterns: [
+        { from: "src/types/index.d.ts", to: "index.d.ts" },
+      ],
+    }),
   ],
   devServer: {
     static: {
