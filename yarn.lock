@@ -1853,7 +1853,7 @@
     "@svgr/plugin-svgo" "8.1.0"
 
 "@telsho/react-google-flight-datepicker@file:":
-  version "1.0.3"
+  version "1.0.4"
   resolved "file:"
   dependencies:
     "@telsho/react-google-flight-datepicker" "file:"

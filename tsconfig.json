@@ -1,22 +1,23 @@
 {
-    "compilerOptions": {
-      "target": "es5",
-      "lib": ["dom", "dom.iterable", "esnext"],
-      "allowJs": true,
-      "skipLibCheck": true,
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true,
-      "strict": true,
-      "forceConsistentCasingInFileNames": true,
-      "module": "esnext",
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "noEmit": true,
-      "jsx": "react-jsx",
-      "outDir": "./dist",
-      "declaration": true
-    },
-    "include": ["src"],
-    "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"]
-  }
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false, 
+    "jsx": "react-jsx",
+    "outDir": "./dist", 
+    "declaration": true, 
+    "declarationDir": "./dist" 
+  },
+  "include": ["src"], 
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"] 
+}
