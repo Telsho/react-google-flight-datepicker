@@ -82,6 +82,7 @@ singleCalendar | Bool | false | Only applicable on SingleDatePicker. When this p
 tooltip | String, React Component, Function | | Display the tooltip when hovering on day element, you can pass string, component, or a function. The function will receive a Date object, so you can generate the content of tooltip.
 subTextDict | Dict | null | Each key of the dict is a date in format YYYY-MM-DD, and the value is the text you want to display. You can see an example in dev/index.js. The text shouldn't be too big
 expandDirection | String | "right" | if "right" the calendar will expand from the top left to the right if "left" it will expand from the top right to the left
+locale | string | "fr", "it" .. | You can specify the locale, it should follow the locale formats from dayjs.
 
 ### Author
 - David Tran - david@jslancer.com
