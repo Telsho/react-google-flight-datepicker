@@ -2,8 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import '../lib/components/DatePicker/styles.scss';
 import dayjs from 'dayjs';
-import { RangeDatePicker } from '../lib/components/DatePicker/RangeDatePicker';
 import { SingleDatePicker } from '../lib/components/DatePicker/SingleDatePicker';
+import { RangeDatePicker } from '@telsho/react-google-flight-datepicker';
 
 interface SubTextDict {
   [key: string]: string;
