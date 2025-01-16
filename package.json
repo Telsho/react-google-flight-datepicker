@@ -1,7 +1,9 @@
 {
-  "name": "react-google-flight-datepicker",
+  "name": "@telsho/react-google-flight-datepicker",
+  "repository": "https://github.com/Telsho/react-google-flight-datepicker",
   "version": "1.0.0",
   "dependencies": {
+    "@telsho/react-google-flight-datepicker": "file:",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.10",
     "react-google-flight-datepicker": "file:",
