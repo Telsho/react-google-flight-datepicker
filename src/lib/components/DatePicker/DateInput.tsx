@@ -101,7 +101,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   return (
     <div
       className={cx('date', { 
-        'is-focus': inputFocus === type, 
+        'is-focus': inputFocus === type && !isSingle, 
         'is-single': isSingle 
       })}
       role="button"
