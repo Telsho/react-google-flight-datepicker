@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import '../lib/components/DatePicker/styles.scss';
 import dayjs from 'dayjs';
 import { SingleDatePicker } from '../lib/components/DatePicker/SingleDatePicker';
-import { RangeDatePicker } from '@telsho/react-google-flight-datepicker';
+import { RangeDatePicker } from '../lib/components/DatePicker/RangeDatePicker';
 
 interface SubTextDict {
   [key: string]: string;
@@ -30,10 +30,10 @@ const App: React.FC = () => {
       <h1>react-google-flight-datepicker</h1>
       <h2>Install</h2>
       <pre>
-        npm install react-google-flight-datepicker
+        npm install @telsho/react-google-flight-datepicker
         <br />
         <br />
-        yarn add react-google-flight-datepicker
+        yarn add @telsho/react-google-flight-datepicker
       </pre>
       <h2>RangeDatePicker</h2>
       <RangeDatePicker
