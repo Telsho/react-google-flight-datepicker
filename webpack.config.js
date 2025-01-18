@@ -3,14 +3,18 @@ const webpack = require("webpack");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CompressionPlugin = require("compression-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV === "production";
 
 module.exports = {
   mode: isProduction ? "production" : "development",
-  entry: isProduction ? "./src/lib/index.ts" : "./src/dev/index.tsx",
+  entry: {
+    main: isProduction ? "./src/lib/index.ts" : "./src/dev/index.tsx", // Main entry point
+  },
   output: {
-    filename: "index.js",
+    filename: isProduction ? "[name].[contenthash].js" : "[name].js", // Unique filenames
     path: path.resolve(__dirname, "dist"),
     libraryTarget: isProduction ? "umd" : undefined,
     library: isProduction ? "ReactGoogleFlightDatepicker" : undefined,
@@ -54,14 +58,13 @@ module.exports = {
             options: {
               presets: ["@babel/preset-env"],
               cacheDirectory: true,
-              plugins: ["@babel/plugin-syntax-dynamic-import"],
             },
           },
         ],
       },
       {
         test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules|dist/, // Exclude dist directory
         use: [
           {
             loader: "babel-loader",
@@ -83,7 +86,7 @@ module.exports = {
       },
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules|dist/, // Exclude dist directory
         use: {
           loader: "babel-loader",
           options: {
@@ -135,8 +138,10 @@ module.exports = {
     },
   },
   optimization: {
+    minimize: isProduction,
     minimizer: [
       new TerserPlugin({
+        parallel: true, // Enable parallel processing
         terserOptions: {
           parse: {
             ecma: 8,
@@ -155,10 +160,28 @@ module.exports = {
         },
       }),
     ],
+    splitChunks: {
+      chunks: "all",
+      minSize: 20000, // Minimum size for chunks
+      maxSize: 244000, // Maximum size for chunks (adjust as needed)
+      minChunks: 1,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+        default: {
+          minChunks: 2,
+          reuseExistingChunk: true,
+        },
+      },
+    },
   },
   plugins: [
+    new BundleAnalyzerPlugin(),
     new MiniCssExtractPlugin({
-      filename: "styles.css",
+      filename: isProduction ? "[name].[contenthash].css" : "[name].css",
     }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: process.env.NODE_ENV || "development",
@@ -166,13 +189,14 @@ module.exports = {
     }),
     new webpack.ContextReplacementPlugin(
       /dayjs[/\\]locale$/,
-      new RegExp(`^\\.\\/(?!${["en"].join("|")}).*\\.js$`)
+      new RegExp(`^\\.\\/(${["en"].join("|")})\\.js$`)
     ),
     new CopyPlugin({
       patterns: [
         { from: "src/types/index.d.ts", to: "index.d.ts" },
       ],
     }),
+    new CompressionPlugin(),
   ],
   devServer: {
     static: {
@@ -187,5 +211,5 @@ module.exports = {
       writeToDisk: true,
     },
   },
-  devtool: isProduction ? "source-map" : "eval-source-map",
+  devtool: isProduction ? false : "cheap-module-source-map",
 };
