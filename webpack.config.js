@@ -11,7 +11,7 @@ const isProduction = process.env.NODE_ENV === "production";
 module.exports = {
   mode: isProduction ? "production" : "development",
   entry: {
-    main: isProduction ? "./src/lib/index.ts" : "./src/dev/index.tsx", // Main entry point
+    main: "./src/lib/index.ts",
   },
   output: {
     filename: isProduction ? "[name].[contenthash].js" : "[name].js", // Unique filenames
@@ -49,22 +49,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /dayjs[/\\]locale/,
-        type: "javascript/auto",
-        include: /node_modules/,
-        use: [
-          {
-            loader: "babel-loader",
-            options: {
-              presets: ["@babel/preset-env"],
-              cacheDirectory: true,
-            },
-          },
-        ],
-      },
-      {
         test: /\.(ts|tsx)$/,
-        exclude: /node_modules|dist/, // Exclude dist directory
+        exclude: /node_modules/,
         use: [
           {
             loader: "babel-loader",
@@ -86,7 +72,7 @@ module.exports = {
       },
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules|dist/, // Exclude dist directory
+        exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
@@ -141,7 +127,7 @@ module.exports = {
     minimize: isProduction,
     minimizer: [
       new TerserPlugin({
-        parallel: true, // Enable parallel processing
+        parallel: true,
         terserOptions: {
           parse: {
             ecma: 8,
@@ -162,8 +148,8 @@ module.exports = {
     ],
     splitChunks: {
       chunks: "all",
-      minSize: 20000, // Minimum size for chunks
-      maxSize: 244000, // Maximum size for chunks (adjust as needed)
+      minSize: 20000,
+      maxSize: 244000,
       minChunks: 1,
       cacheGroups: {
         vendors: {
@@ -198,18 +184,5 @@ module.exports = {
     }),
     new CompressionPlugin(),
   ],
-  devServer: {
-    static: {
-      directory: path.join(__dirname, "public"),
-      publicPath: "/",
-    },
-    port: 3000,
-    hot: true,
-    open: true,
-    historyApiFallback: true,
-    devMiddleware: {
-      writeToDisk: true,
-    },
-  },
   devtool: isProduction ? false : "cheap-module-source-map",
 };
