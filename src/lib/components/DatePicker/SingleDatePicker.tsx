@@ -1,3 +1,4 @@
+import React from "react";
 import BaseDatePicker, { BaseDatePickerProps } from "./BaseDatePicker";
 
 export interface SingleDatePickerProps extends Omit<BaseDatePickerProps, 'onChange'> {
