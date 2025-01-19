@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import cx from "classnames";
 import localeData from "dayjs/plugin/localeData";
-import { debounce, loadLocale } from "../../helpers";
+import { debounce } from "../../helpers";
 
 import { DateInputGroup } from "./DateInputGroup";
 import DialogWrapper from "./DialogWrapper";
