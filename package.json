@@ -1,7 +1,7 @@
 {
   "name": "@telsho/react-google-flight-datepicker",
   "repository": "https://github.com/Telsho/react-google-flight-datepicker",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
@@ -29,6 +29,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "enzyme": "^3.11.0",
+    "esbuild-plugin-svgr": "^3.1.0",
     "eslint": "^8.51.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-flowtype": "^8.0.3",

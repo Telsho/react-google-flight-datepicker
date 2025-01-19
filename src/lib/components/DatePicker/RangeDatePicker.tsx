@@ -1,7 +1,7 @@
 import React from "react";
 import BaseDatePicker, { BaseDatePickerProps } from "./BaseDatePicker";
+import './styles.scss';
 
-// RangeDatePicker.tsx
 export interface RangeDatePickerProps extends BaseDatePickerProps {
   startDate: Date | null;
   endDate: Date | null;
