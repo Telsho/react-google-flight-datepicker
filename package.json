@@ -1,7 +1,7 @@
 {
   "name": "@telsho/react-google-flight-datepicker",
   "repository": "https://github.com/Telsho/react-google-flight-datepicker",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
@@ -51,7 +51,7 @@
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.5.2",
     "tsup": "^8.3.5",
-    "typescript": "^5.7.2",
+    "typescript": "^5.7.3",
     "webpack": "^5.89.0",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^6.0.1",
@@ -59,7 +59,7 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "tsup",
+    "build": "npx tsup",
     "prepare": "npm run build"
   },
   "files": [
