@@ -45,8 +45,9 @@ export const Day = forwardRef<HTMLDivElement, DayProps>(({
   };
 
   const handleTooltipPosition = useCallback(() => {
-    const tooltipElement = ref as React.RefObject<HTMLDivElement>;
-    const element = tooltipElement.current;
+    // Check if ref exists and is a RefObject
+    if (!ref || typeof ref === 'function') return;
+    const element = ref.current;
     if (element && dayRef.current) {
       element.style.left = `${
         dayRef.current.offsetLeft - element.offsetWidth + 135
@@ -59,8 +60,8 @@ export const Day = forwardRef<HTMLDivElement, DayProps>(({
   }, [ref]);
 
   const handleTooltipHidden = useCallback(() => {
-    const tooltipElement = ref as React.RefObject<HTMLDivElement>;
-    const element = tooltipElement.current;
+    if (!ref || typeof ref === 'function') return;
+    const element = ref.current;
     if (element) {
       element.style.visibility = 'hidden';
     }

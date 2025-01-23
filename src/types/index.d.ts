@@ -1,5 +1,5 @@
-import { RangeDatePickerProps } from '../lib/components/RangeDatePicker';
-import { SingleDatePickerProps } from '../lib/components/SingleDatePicker';
+import { RangeDatePickerProps } from "../lib/components/DatePicker/RangeDatePicker";
+import { SingleDatePickerProps } from "../lib/components/DatePicker/SingleDatePicker";
 
 export { RangeDatePickerProps, SingleDatePickerProps };
 

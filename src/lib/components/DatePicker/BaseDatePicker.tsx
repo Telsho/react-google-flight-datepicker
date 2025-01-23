@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import cx from "classnames";
 import localeData from "dayjs/plugin/localeData";
@@ -101,19 +101,24 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isFirstTime, setIsFirstTime] = useState<boolean>(false);
 
+
+  const useClientSide = () => {
+    const [isClient, setIsClient] = useState(false);
+    useEffect(() => { setIsClient(true); }, []);
+    return isClient;
+  };
+  const isClient = useClientSide();
+
   // Refs
   const containerRef = useRef<HTMLDivElement>(null);
   const fromDateRef = useRef<Dayjs | null>(null);
   const toDateRef = useRef<Dayjs | null>(null);
 
   // Handle resize for mobile detection
-  const handleResize = (): void => {
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
-  };
+  const handleResize = useCallback((): void => {
+    if (!isClient) return;
+    setIsMobile(window.innerWidth < 768);
+  }, [isClient]);
 
   // Notify change handlers
   const notifyChange = (): void => {
@@ -158,13 +163,11 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
   };
 
   useLayoutEffect(() => {
+    if (!isClient) return;
     handleResize();
-    if (typeof window !== "undefined") {
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }
-  }, []);
-
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isClient, handleResize]);
   useEffect(() => {
     setIsFirstTime(true);
     const handleDocumentClick = (e: MouseEvent): void => {
@@ -241,10 +244,13 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
     setInputFocus(focusInput);
   };
 
-  const onSelectDate = (date: Dayjs): void => {
+  const onSelectDate = useCallback((date: Dayjs): void => {
+    const minDayjs = minDate ? dayjs(minDate) : null;
+    const maxDayjs = maxDate ? dayjs(maxDate) : null;
+
     if (
-      (minDate && dayjs(minDate).isAfter(date, "date")) ||
-      (maxDate && dayjs(maxDate).isBefore(date, "date"))
+      (minDayjs && minDayjs.isAfter(date, "date")) ||
+      (maxDayjs && maxDayjs.isBefore(date, "date"))
     ) {
       return;
     }
@@ -269,8 +275,8 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
       if (hideDialogAfterSelectEndDate) {
         setTimeout(() => setComplsOpen(false), 50);
       }
-    }
-  };
+    }}, [minDate, maxDate, isSingle, hideDialogAfterSelectEndDate, inputFocus, fromDate, toDate]);
+
 
   const onHoverDate = (date: Dayjs): void => {
     setHoverDate(date);
@@ -285,10 +291,13 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
     setInputFocus("from");
   };
 
-  const handleChangeDate = (date: Dayjs, type: "from" | "to"): void => {
+  const handleChangeDate = useCallback((date: Dayjs, type: "from" | "to"): void => {
+    const minDayjs = minDate ? dayjs(minDate) : null;
+    const maxDayjs = maxDate ? dayjs(maxDate) : null;
+
     if (
-      (minDate && dayjs(minDate).isAfter(date, "date")) ||
-      (maxDate && dayjs(maxDate).isBefore(date, "date"))
+      (minDayjs && minDayjs.isAfter(date, "date")) ||
+      (maxDayjs && maxDayjs.isBefore(date, "date"))
     ) {
       return;
     }
@@ -303,7 +312,7 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
       setInputFocus("to");
       updateToDate(date, true);
     }
-  };
+  }, [minDate, maxDate, isSingle, toDate, inputFocus]);
 
   // Create context values
   const dateState: DateState = {
@@ -321,8 +330,8 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
   const config: DatePickerConfig = {
     isSingle,
     startWeekDay,
-    minDate,
-    maxDate,
+    minDate: minDate ? dayjs(minDate).toDate() : null,
+    maxDate: maxDate ? dayjs(maxDate).toDate() : null,
     weekDayFormat,
     dateFormat,
     monthFormat,
