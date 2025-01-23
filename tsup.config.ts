@@ -5,18 +5,22 @@ import svgr from 'esbuild-plugin-svgr';
 export default defineConfig({
   entry: ['src/lib/index.ts'],
   outDir: 'dist',
-  format: ['cjs', 'esm'],
+  format: ['esm', 'cjs'],
+  bundle: true,
+  splitting: false,
   dts: true,
   clean: true,
   minify: true,
   sourcemap: true,
+  platform: 'browser',
+  target: 'es2017',
+  inject: ['./src/lib/ssr-shim.js'], 
+  external: ['react', 'react-dom'],
   esbuildPlugins: [
     sassPlugin({
-      type: 'style',
+      type: 'css-text',
+      cssImports: true
     }),
-    svgr(), 
+    svgr(),
   ],
-  loader: {
-    '.scss': 'css',
-  },
 });

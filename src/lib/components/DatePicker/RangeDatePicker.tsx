@@ -1,6 +1,7 @@
 import React from "react";
 import BaseDatePicker, { BaseDatePickerProps } from "./BaseDatePicker";
-import './styles.scss';
+import "./styles.scss";
+import { ClientOnly } from "./ClientOnly";
 
 export interface RangeDatePickerProps extends BaseDatePickerProps {
   startDate: Date | null;
@@ -18,18 +19,20 @@ export interface RangeDatePickerProps extends BaseDatePickerProps {
 export const RangeDatePicker: React.FC<RangeDatePickerProps> = ({
   onChange = () => {},
   onCloseCalendar = () => {},
-  startDatePlaceholder = 'Start date',
-  endDatePlaceholder = 'End date',
+  startDatePlaceholder = "Start date",
+  endDatePlaceholder = "End date",
   ...props
 }) => (
-  <BaseDatePicker
-    {...props}
-    isSingle={false}
-    startDate={props.startDate}
-    endDate={props.endDate}
-    startDatePlaceholder={startDatePlaceholder}
-    endDatePlaceholder={endDatePlaceholder}
-    onChange={onChange}
-    onCloseCalendar={onCloseCalendar}
-  />
+  <ClientOnly>
+    <BaseDatePicker
+      {...props}
+      isSingle={false}
+      startDate={props.startDate}
+      endDate={props.endDate}
+      startDatePlaceholder={startDatePlaceholder}
+      endDatePlaceholder={endDatePlaceholder}
+      onChange={onChange}
+      onCloseCalendar={onCloseCalendar}
+    />
+  </ClientOnly>
 );
