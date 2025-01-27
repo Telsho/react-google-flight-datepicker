@@ -1,26 +1,26 @@
-import { defineConfig } from 'tsup';
-import { sassPlugin } from 'esbuild-sass-plugin';
+import { defineConfig } from "tsup";
 import svgr from 'esbuild-plugin-svgr';
+import { copy } from 'esbuild-plugin-copy'; // Use this plugin instead
 
 export default defineConfig({
-  entry: ['src/lib/index.ts'],
+  entry: ['src/lib/index.ts'], // Removed SCSS entry
   outDir: 'dist',
   format: ['esm', 'cjs'],
-  bundle: true,
-  splitting: false,
   dts: true,
-  clean: true,
-  minify: true,
+  splitting: false,
   sourcemap: true,
-  platform: 'browser',
-  target: 'es2017',
-  inject: ['./src/lib/ssr-shim.js'], 
-  external: ['react', 'react-dom'],
+  clean: true,
   esbuildPlugins: [
-    sassPlugin({
-      type: 'css-text',
-      cssImports: true
-    }),
     svgr(),
+    copy({
+      assets: {
+        from: ['src/lib/components/DatePicker/styles.scss'],
+        to: ['dist/styles.scss'],
+      },
+      resolveFrom: 'cwd',
+    }),
   ],
+  esbuildOptions(options) {
+    options.assetNames = 'assets/[name]-[hash]';
+  }
 });
