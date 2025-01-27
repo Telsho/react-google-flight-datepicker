@@ -1,6 +1,5 @@
 import React from "react";
 import BaseDatePicker, { BaseDatePickerProps } from "./BaseDatePicker";
-import "./styles.scss";
 import { ClientOnly } from "./ClientOnly";
 
 export interface SingleDatePickerProps

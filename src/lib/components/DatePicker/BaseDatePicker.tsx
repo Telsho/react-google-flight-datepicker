@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import dayjs, { Dayjs } from "dayjs";
 import cx from "classnames";
 import localeData from "dayjs/plugin/localeData";
@@ -7,7 +13,7 @@ import { debounce } from "../../helpers";
 import { DateInputGroup } from "./DateInputGroup";
 import DialogWrapper from "./DialogWrapper";
 import { Dialog } from "./Dialog";
-import "./styles.scss";
+
 import {
   DatePickerConfig,
   DatePickerProvider,
@@ -15,6 +21,7 @@ import {
   DisplayCustomization,
   UIState,
 } from "./DatePickerProvider";
+import { useClientSide } from "@lib/hooks/useClientSide";
 
 dayjs.extend(localeData);
 
@@ -102,11 +109,6 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
   const [isFirstTime, setIsFirstTime] = useState<boolean>(false);
 
 
-  const useClientSide = () => {
-    const [isClient, setIsClient] = useState(false);
-    useEffect(() => { setIsClient(true); }, []);
-    return isClient;
-  };
   const isClient = useClientSide();
 
   // Refs
@@ -168,7 +170,10 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [isClient, handleResize]);
+
   useEffect(() => {
+    if (!isClient) return;
+
     setIsFirstTime(true);
     const handleDocumentClick = (e: MouseEvent): void => {
       if (
@@ -183,7 +188,7 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
 
     document.addEventListener("click", handleDocumentClick);
     return () => document.removeEventListener("click", handleDocumentClick);
-  }, []);
+  }, [isClient]); // Add isClient to dependencies
 
   useEffect(() => {
     const _startDateJs = startDate ? dayjs(startDate) : null;
@@ -244,39 +249,50 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
     setInputFocus(focusInput);
   };
 
-  const onSelectDate = useCallback((date: Dayjs): void => {
-    const minDayjs = minDate ? dayjs(minDate) : null;
-    const maxDayjs = maxDate ? dayjs(maxDate) : null;
+  const onSelectDate = useCallback(
+    (date: Dayjs): void => {
+      const minDayjs = minDate ? dayjs(minDate) : null;
+      const maxDayjs = maxDate ? dayjs(maxDate) : null;
 
-    if (
-      (minDayjs && minDayjs.isAfter(date, "date")) ||
-      (maxDayjs && maxDayjs.isBefore(date, "date"))
-    ) {
-      return;
-    }
+      if (
+        (minDayjs && minDayjs.isAfter(date, "date")) ||
+        (maxDayjs && maxDayjs.isBefore(date, "date"))
+      ) {
+        return;
+      }
 
-    if (isSingle) {
-      updateFromDate(date, true);
-      if (hideDialogAfterSelectEndDate) {
-        setTimeout(() => setComplsOpen(false), 50);
+      if (isSingle) {
+        updateFromDate(date, true);
+        if (hideDialogAfterSelectEndDate) {
+          setTimeout(() => setComplsOpen(false), 50);
+        }
+      } else if (
+        inputFocus === "from" ||
+        (fromDate && date.isBefore(fromDate, "date"))
+      ) {
+        updateFromDate(date, true);
+        if (toDate && date.isAfter(toDate, "date")) {
+          updateToDate(null, true);
+        }
+        setInputFocus("to");
+      } else {
+        updateToDate(date, true);
+        setInputFocus(null);
+        if (hideDialogAfterSelectEndDate) {
+          setTimeout(() => setComplsOpen(false), 50);
+        }
       }
-    } else if (
-      inputFocus === "from" ||
-      (fromDate && date.isBefore(fromDate, "date"))
-    ) {
-      updateFromDate(date, true);
-      if (toDate && date.isAfter(toDate, "date")) {
-        updateToDate(null, true);
-      }
-      setInputFocus("to");
-    } else {
-      updateToDate(date, true);
-      setInputFocus(null);
-      if (hideDialogAfterSelectEndDate) {
-        setTimeout(() => setComplsOpen(false), 50);
-      }
-    }}, [minDate, maxDate, isSingle, hideDialogAfterSelectEndDate, inputFocus, fromDate, toDate]);
-
+    },
+    [
+      minDate,
+      maxDate,
+      isSingle,
+      hideDialogAfterSelectEndDate,
+      inputFocus,
+      fromDate,
+      toDate,
+    ]
+  );
 
   const onHoverDate = (date: Dayjs): void => {
     setHoverDate(date);
@@ -291,28 +307,31 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
     setInputFocus("from");
   };
 
-  const handleChangeDate = useCallback((date: Dayjs, type: "from" | "to"): void => {
-    const minDayjs = minDate ? dayjs(minDate) : null;
-    const maxDayjs = maxDate ? dayjs(maxDate) : null;
+  const handleChangeDate = useCallback(
+    (date: Dayjs, type: "from" | "to"): void => {
+      const minDayjs = minDate ? dayjs(minDate) : null;
+      const maxDayjs = maxDate ? dayjs(maxDate) : null;
 
-    if (
-      (minDayjs && minDayjs.isAfter(date, "date")) ||
-      (maxDayjs && maxDayjs.isBefore(date, "date"))
-    ) {
-      return;
-    }
-
-    if (type === "from" || isSingle) {
-      setInputFocus("from");
-      updateFromDate(date, true);
-      if (!isSingle && toDate && date.isAfter(toDate, "date")) {
-        updateToDate(null, true);
+      if (
+        (minDayjs && minDayjs.isAfter(date, "date")) ||
+        (maxDayjs && maxDayjs.isBefore(date, "date"))
+      ) {
+        return;
       }
-    } else {
-      setInputFocus("to");
-      updateToDate(date, true);
-    }
-  }, [minDate, maxDate, isSingle, toDate, inputFocus]);
+
+      if (type === "from" || isSingle) {
+        setInputFocus("from");
+        updateFromDate(date, true);
+        if (!isSingle && toDate && date.isAfter(toDate, "date")) {
+          updateToDate(null, true);
+        }
+      } else {
+        setInputFocus("to");
+        updateToDate(date, true);
+      }
+    },
+    [minDate, maxDate, isSingle, toDate, inputFocus]
+  );
 
   // Create context values
   const dateState: DateState = {
