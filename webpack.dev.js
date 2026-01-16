@@ -24,6 +24,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js', '.jsx', '.json'],
     alias: {
       '@telsho/react-google-flight-datepicker': path.resolve(__dirname, 'src'),
+      '@lib': path.resolve(__dirname, 'src/lib'),
     },
   },
   module: {

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, ReactElement } from 'react';
 import cx from 'classnames';
 import dayjs, { Dayjs } from 'dayjs';
 import { useDatePickerConfig } from './DatePickerProvider';
@@ -35,7 +35,7 @@ export const MonthCalendar = forwardRef<HTMLDivElement, MonthCalendarProps>(({
     singleCalendar
   } = useDatePickerConfig();
 
-  const generateWeek = (): JSX.Element[] => {
+  const generateWeek = (): ReactElement[] => {
     const { totalWeek, totalDay } = getMonthInfo(year, month, startWeekDay);
   
     return totalWeek.map((week) => {
@@ -57,7 +57,7 @@ export const MonthCalendar = forwardRef<HTMLDivElement, MonthCalendarProps>(({
     });
   };
 
-  const generateWeekDay = (): JSX.Element[] => {
+  const generateWeekDay = (): ReactElement[] => {
     const arrWeekDay: string[] = getWeekDay(startWeekDay, weekDayFormat);
   
     return arrWeekDay.map((day) => {
