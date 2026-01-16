@@ -90,8 +90,8 @@ const App: React.FC = () => {
 
       <h2>Highlight today</h2>
       <RangeDatePicker
-        startDate={new Date(2020, 0, 15)}
-        endDate={new Date(2020, 1, 1)}
+        startDate={new Date()}
+        endDate={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)}
         startDatePlaceholder="From"
         endDatePlaceholder="To"
         highlightToday

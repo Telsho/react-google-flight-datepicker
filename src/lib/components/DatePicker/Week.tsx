@@ -57,7 +57,7 @@ export const Week = forwardRef<HTMLDivElement, WeekProps>(({
         (toDate && dateValue.isSame(toDate, 'date'));
       let hovered = false;
       const highlight =
-        highlightToday && dateValue.isSame(new Date(), 'date');
+        highlightToday && dateValue.isSame(dayjs(), 'date');
 
       if (fromDate && !fromDate.isSame(toDate, 'date') && !isSingle) {
         if (
