@@ -60,8 +60,9 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
     if (!isClient || !containerRef.current) return;
 
     const updateDimensions = () => {
-      const width = containerRef.current!.offsetWidth;
-      const style = window.getComputedStyle(containerRef.current!);
+      if (!containerRef.current) return;
+      const width = containerRef.current.offsetWidth;
+      const style = window.getComputedStyle(containerRef.current);
       const translateValue = singleCalendar
         ? width + parseInt(style.marginLeft) - 8
         : width / 2;

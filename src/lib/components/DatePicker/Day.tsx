@@ -50,10 +50,10 @@ export const Day = forwardRef<HTMLDivElement, DayProps>(({
     const element = ref.current;
     if (element && dayRef.current) {
       element.style.left = `${
-        dayRef.current.offsetLeft - element.offsetWidth + 135
+        dayRef.current.offsetLeft - (element.offsetWidth || 0) + 135
       }px`;
       element.style.top = `${
-        dayRef.current.offsetTop - element.offsetHeight - 15
+        dayRef.current.offsetTop - (element.offsetHeight || 0) - 15
       }px`;
       element.style.visibility = 'visible';
     }
