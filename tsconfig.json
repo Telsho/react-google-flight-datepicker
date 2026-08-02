@@ -15,9 +15,9 @@
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "types": ["node", "jest"],
-    "baseUrl": ".",
+    "rootDir": "src",
     "paths": {
-      "@lib/*": ["src/lib/*"]
+      "@lib/*": ["./src/lib/*"]
     }
   },
   "include": ["src/**/*"],

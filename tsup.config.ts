@@ -6,7 +6,7 @@ export default defineConfig({
   entry: ['src/lib/index.ts'], // Removed SCSS entry
   outDir: 'dist',
   format: ['esm', 'cjs'],
-  dts: true,
+  dts: false,
   splitting: false,
   sourcemap: true,
   clean: true,
