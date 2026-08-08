@@ -29,7 +29,7 @@ export const SingleDatePicker: React.FC<SingleDatePickerProps> = ({
       {...props}
       endDate={null}
       isSingle={true}
-      startDate={props.startDate}
+      startDate={props.startDate ?? null}
       startDatePlaceholder={startDatePlaceholder}
       labels={labels}
       resetText={resetText}
