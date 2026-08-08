@@ -47,6 +47,8 @@ export interface DisplayCustomization {
   hideDialogHeader: boolean;
   hideDialogFooter: boolean;
   hideDialogAfterSelectEndDate: boolean;
+  resetText: string;
+  doneText: string;
   tooltip?: string | React.ReactNode | ((date: Date) => React.ReactNode);
   subTextDict?: SubTextDict | null;
 }

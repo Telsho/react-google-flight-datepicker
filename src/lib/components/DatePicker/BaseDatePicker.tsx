@@ -30,6 +30,8 @@ export interface SubTextDict {
   [key: string]: string;
 }
 
+import { DatePickerLabels, getLabels } from "../../translations";
+
 // Base shared props
 export interface BaseDatePickerProps {
   className?: string;
@@ -46,6 +48,9 @@ export interface BaseDatePickerProps {
   subTextDict?: SubTextDict | null;
   expandDirection?: string;
   locale?: string;
+  labels?: DatePickerLabels;
+  resetText?: string;
+  doneText?: string;
   onFocus?: (input: string) => void;
 }
 
@@ -91,6 +96,9 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
   subTextDict = null,
   expandDirection = "right",
   locale = "en",
+  labels,
+  resetText,
+  doneText,
   isSingle = false,
   singleCalendar = false,
 }) => {
@@ -399,24 +407,38 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
     [complsOpen, isMobile, disabled, toggleDialog]
   );
 
+  const activeLabels = useMemo(() => {
+    return getLabels(locale, labels, resetText, doneText);
+  }, [locale, labels, resetText, doneText]);
+
+  const effectiveStartDatePlaceholder =
+    startDatePlaceholder ||
+    (isSingle ? activeLabels.singleDatePlaceholder : activeLabels.startDatePlaceholder);
+  const effectiveEndDatePlaceholder =
+    endDatePlaceholder || activeLabels.endDatePlaceholder;
+
   const display: DisplayCustomization = useMemo(
     () => ({
-      startDatePlaceholder,
-      endDatePlaceholder,
+      startDatePlaceholder: effectiveStartDatePlaceholder,
+      endDatePlaceholder: effectiveEndDatePlaceholder,
       dateInputSeperator,
       hideDialogHeader,
       hideDialogFooter,
       hideDialogAfterSelectEndDate,
+      resetText: activeLabels.reset,
+      doneText: activeLabels.done,
       tooltip,
       subTextDict,
     }),
     [
-      startDatePlaceholder,
-      endDatePlaceholder,
+      effectiveStartDatePlaceholder,
+      effectiveEndDatePlaceholder,
       dateInputSeperator,
       hideDialogHeader,
       hideDialogFooter,
       hideDialogAfterSelectEndDate,
+      activeLabels.reset,
+      activeLabels.done,
       tooltip,
       subTextDict,
     ]
