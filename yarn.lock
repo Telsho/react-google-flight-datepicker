@@ -2031,7 +2031,7 @@
     "@svgr/plugin-svgo" "8.1.0"
 
 "@telsho/react-google-flight-datepicker@file:":
-  version "1.1.6"
+  version "1.1.7"
   resolved "file:"
   dependencies:
     "@telsho/react-google-flight-datepicker" "file:"
@@ -6324,9 +6324,9 @@ mz@^2.7.0:
     thenify-all "^1.0.0"
 
 nanoid@^3.3.16:
-  version "3.3.16"
-  resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.16.tgz"
-  integrity sha512-bzlKTyNJ7+LdGIIwy8ijFpIqEQIvafahV7eYykJ8Cvh42EdJeODoJ6gUJXpQJvej1BddH8OqTXZNE/KfbWAu8Q==
+  version "3.3.18"
+  resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.18.tgz"
+  integrity sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==
 
 napi-postinstall@^0.3.4:
   version "0.3.4"
