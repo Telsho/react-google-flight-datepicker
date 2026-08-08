@@ -117,6 +117,26 @@ const App: React.FC = () => {
         expandDirection="left"
       />
       <br />
+
+      <h2>Multi-language / French Locale (fr)</h2>
+      <RangeDatePicker
+        locale="fr"
+        startDate={new Date()}
+        endDate={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)}
+      />
+      <br />
+
+      <h2>Multi-language / Spanish Locale with custom labels (es)</h2>
+      <RangeDatePicker
+        locale="es"
+        labels={{
+          reset: 'Vaciar',
+          done: 'Aceptar',
+          startDatePlaceholder: 'Desde',
+          endDatePlaceholder: 'Hasta'
+        }}
+      />
+      <br />
     </div>
   );
 };
