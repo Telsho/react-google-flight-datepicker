@@ -2,3 +2,5 @@ export type { RangeDatePickerProps } from './components/DatePicker/RangeDatePick
 export type { SingleDatePickerProps } from './components/DatePicker/SingleDatePicker';
 export { RangeDatePicker } from './components/DatePicker/RangeDatePicker';
 export { SingleDatePicker } from './components/DatePicker/SingleDatePicker';
+export type { DatePickerLabels } from './translations';
+export { getLabels, translations } from './translations';
