@@ -201,15 +201,19 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
 
   useEffect(() => {
     const _startDateJs = startDate ? dayjs(startDate) : null;
-    fromDateRef.current = _startDateJs;
-    updateFromDate(_startDateJs, false);
+    if ((_startDateJs && !fromDateRef.current) || (!_startDateJs && fromDateRef.current) || (_startDateJs && fromDateRef.current && !_startDateJs.isSame(fromDateRef.current, 'date'))) {
+      fromDateRef.current = _startDateJs;
+      updateFromDate(_startDateJs, false);
+    }
   }, [startDate]);
 
   useEffect(() => {
     if (!isSingle) {
       const _endDateJs = endDate ? dayjs(endDate) : null;
-      toDateRef.current = _endDateJs;
-      updateToDate(_endDateJs, false);
+      if ((_endDateJs && !toDateRef.current) || (!_endDateJs && toDateRef.current) || (_endDateJs && toDateRef.current && !_endDateJs.isSame(toDateRef.current, 'date'))) {
+        toDateRef.current = _endDateJs;
+        updateToDate(_endDateJs, false);
+      }
     }
   }, [endDate, isSingle]);
 
