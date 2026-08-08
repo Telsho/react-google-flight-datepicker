@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { SubTextDict } from './BaseDatePicker';
+import { loadLocale } from '../../helpers';
 
 // Core date state and handlers
 export interface DateState {
@@ -92,18 +93,6 @@ export const useLocale = () => {
   const context = useContext(LocaleContext);
   if (!context) throw new Error('useLocale must be used within DatePickerProvider');
   return context;
-};
-
-// Locale loader utility
-const loadLocale = async (locale: string): Promise<boolean> => {
-  if (locale === 'en') return true;
-  try {
-    await import(`dayjs/locale/${locale}.js`);
-    return true;
-  } catch (error) {
-    console.error(`Failed to load locale ${locale}:`, error);
-    return false;
-  }
 };
 
 // Provider Props interface

@@ -16,17 +16,11 @@ import {
 import PrevIcon from "../../assets/svg/prev.svg";
 import NextIcon from "../../assets/svg/next.svg";
 import { MonthCalendar } from "./MonthCalendar";
+import { useClientSide } from "../../hooks/useClientSide";
 
 interface DialogContentDesktopProps {
   dateChanged?: Dayjs | null;
 }
-
-// Client-side check hook
-const useClientSide = () => {
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => { setIsClient(true); }, []);
-  return isClient;
-};
 
 export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
   dateChanged = null,

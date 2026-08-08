@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useCallback,
+  useMemo,
 } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import cx from "classnames";
@@ -334,49 +335,92 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
   );
 
   // Create context values
-  const dateState: DateState = {
-    fromDate,
-    toDate,
-    hoverDate,
-    inputFocus,
-    onSelectDate,
-    onHoverDate,
-    handleChangeDate,
-    handleReset,
-    handleClickDateInput,
-  };
+  const dateState: DateState = useMemo(
+    () => ({
+      fromDate,
+      toDate,
+      hoverDate,
+      inputFocus,
+      onSelectDate,
+      onHoverDate,
+      handleChangeDate,
+      handleReset,
+      handleClickDateInput,
+    }),
+    [
+      fromDate,
+      toDate,
+      hoverDate,
+      inputFocus,
+      onSelectDate,
+      onHoverDate,
+      handleChangeDate,
+      handleReset,
+      handleClickDateInput,
+    ]
+  );
 
-  const config: DatePickerConfig = {
-    isSingle,
-    startWeekDay,
-    minDate: minDate ? dayjs(minDate).toDate() : null,
-    maxDate: maxDate ? dayjs(maxDate).toDate() : null,
-    weekDayFormat,
-    dateFormat,
-    monthFormat,
-    highlightToday,
-    singleCalendar,
-    expandDirection,
-    locale,
-  };
+  const config: DatePickerConfig = useMemo(
+    () => ({
+      isSingle,
+      startWeekDay,
+      minDate: minDate ? dayjs(minDate).toDate() : null,
+      maxDate: maxDate ? dayjs(maxDate).toDate() : null,
+      weekDayFormat,
+      dateFormat,
+      monthFormat,
+      highlightToday,
+      singleCalendar,
+      expandDirection,
+      locale,
+    }),
+    [
+      isSingle,
+      startWeekDay,
+      minDate,
+      maxDate,
+      weekDayFormat,
+      dateFormat,
+      monthFormat,
+      highlightToday,
+      singleCalendar,
+      expandDirection,
+      locale,
+    ]
+  );
 
-  const uiState: UIState = {
-    complsOpen,
-    isMobile,
-    disabled,
-    toggleDialog,
-  };
+  const uiState: UIState = useMemo(
+    () => ({
+      complsOpen,
+      isMobile,
+      disabled,
+      toggleDialog,
+    }),
+    [complsOpen, isMobile, disabled, toggleDialog]
+  );
 
-  const display: DisplayCustomization = {
-    startDatePlaceholder,
-    endDatePlaceholder,
-    dateInputSeperator,
-    hideDialogHeader,
-    hideDialogFooter,
-    hideDialogAfterSelectEndDate,
-    tooltip,
-    subTextDict,
-  };
+  const display: DisplayCustomization = useMemo(
+    () => ({
+      startDatePlaceholder,
+      endDatePlaceholder,
+      dateInputSeperator,
+      hideDialogHeader,
+      hideDialogFooter,
+      hideDialogAfterSelectEndDate,
+      tooltip,
+      subTextDict,
+    }),
+    [
+      startDatePlaceholder,
+      endDatePlaceholder,
+      dateInputSeperator,
+      hideDialogHeader,
+      hideDialogFooter,
+      hideDialogAfterSelectEndDate,
+      tooltip,
+      subTextDict,
+    ]
+  );
 
   return (
     <div className="react-google-flight-datepicker">

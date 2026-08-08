@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
+import React, { forwardRef, useCallback, useRef } from 'react';
 import cx from 'classnames';
 import { Dayjs } from 'dayjs';
 import { useDateState } from './DatePickerProvider';
@@ -46,14 +46,7 @@ export const Day = forwardRef<HTMLDivElement, DayProps>(({
     }
   };
 
-  const handleHoverDate = () => {
-    if (disabled) return;
-    onHoverDate(dateValue);
-    handleHoverDay(dateValue);
-  };
-
   const handleTooltipPosition = useCallback(() => {
-    // Check if ref exists and is a RefObject
     if (!ref || typeof ref === 'function') return;
     const element = ref.current;
     if (element && dayRef.current) {
@@ -75,19 +68,11 @@ export const Day = forwardRef<HTMLDivElement, DayProps>(({
     }
   }, [ref]);
 
-  useEffect(() => {
-    const currentRef = dayRef.current;
-    if (currentRef) {
-      currentRef.addEventListener('mouseover', handleTooltipPosition);
-      currentRef.addEventListener('mouseleave', handleTooltipHidden);
-    }
-    return () => {
-      if (currentRef) {
-        currentRef.removeEventListener('mouseover', handleTooltipPosition);
-        currentRef.removeEventListener('mouseleave', handleTooltipHidden);
-      }
-    };
-  }, [handleTooltipPosition, handleTooltipHidden]);
+  const handleHoverDate = () => {
+    if (disabled) return;
+    onHoverDate(dateValue);
+    handleHoverDay(dateValue);
+  };
 
   return (
     <div
@@ -101,7 +86,11 @@ export const Day = forwardRef<HTMLDivElement, DayProps>(({
       })}
       onClick={selectDate}
       onKeyDown={handleKeyDown}
-      onMouseEnter={handleHoverDate}
+      onMouseEnter={(e) => {
+        handleHoverDate();
+        handleTooltipPosition();
+      }}
+      onMouseLeave={handleTooltipHidden}
       role="gridcell"
       aria-selected={Boolean(selected)}
       aria-disabled={Boolean(disabled)}

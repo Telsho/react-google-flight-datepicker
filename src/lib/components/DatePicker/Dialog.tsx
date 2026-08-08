@@ -57,7 +57,7 @@ export const Dialog: React.FC<DialogContainerProps> = ({
     if (complsOpen) {
       setTimeout(() => {
         const startDateInput = containerRef.current?.querySelector(
-          '#start-date-input-button'
+          '#from-date-input-button'
         ) as HTMLElement;
         if (startDateInput) {
           startDateInput.focus();

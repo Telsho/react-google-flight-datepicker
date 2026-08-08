@@ -52,10 +52,7 @@ export function getWeekDay(
   );
 
   if (startWeekDay === 'sunday') {
-    const last = days.pop();
-    if (last) {
-      days.unshift(last);
-    }
+    return [days[6], ...days.slice(0, 6)];
   }
   
   return days;
