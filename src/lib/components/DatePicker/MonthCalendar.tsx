@@ -32,7 +32,8 @@ export const MonthCalendar = forwardRef<HTMLDivElement, MonthCalendarProps>(({
     startWeekDay,
     weekDayFormat,
     monthFormat,
-    singleCalendar
+    singleCalendar,
+    locale
   } = useDatePickerConfig();
 
   const generateWeek = (): ReactElement[] => {
@@ -70,7 +71,7 @@ export const MonthCalendar = forwardRef<HTMLDivElement, MonthCalendarProps>(({
   };
 
   const getMonthDisplay = (): string => {
-    const date = dayjs(`${year}-${month + 1}-1`);
+    const date = dayjs(`${year}-${month + 1}-1`).locale(locale || dayjs.locale());
     return monthFormat 
       ? date.format(monthFormat)
       : date.format('MMMM - YYYY');

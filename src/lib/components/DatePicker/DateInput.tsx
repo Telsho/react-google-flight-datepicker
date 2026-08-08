@@ -39,7 +39,8 @@ export const DateInput: React.FC<DateInputProps> = ({
     isSingle,
     minDate,
     maxDate,
-    dateFormat
+    dateFormat,
+    locale
   } = useDatePickerConfig();
 
   const {
@@ -52,10 +53,10 @@ export const DateInput: React.FC<DateInputProps> = ({
 
   useEffect(() => {
     if (value) {
-      let formattedValue = value.clone().locale(dayjs.locale());
+      let formattedValue = value.clone().locale(locale || dayjs.locale());
       let text = formattedValue.format('ddd, DD MMM');
       if (dateFormat) {
-        text = value.format(dateFormat);
+        text = formattedValue.format(dateFormat);
       }
       setFormattedDate(text);
 
@@ -78,7 +79,7 @@ export const DateInput: React.FC<DateInputProps> = ({
     } else {
       setFormattedDate(null);
     }
-  }, [value, fromDate, minDate, maxDate, dateFormat, type]);
+  }, [value, fromDate, minDate, maxDate, dateFormat, locale, type]);
 
   const prevDate = (e: React.MouseEvent) => {
     e.stopPropagation();
