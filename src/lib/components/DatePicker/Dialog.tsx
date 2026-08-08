@@ -43,6 +43,8 @@ export const Dialog: React.FC<DialogContainerProps> = ({
   const {
     hideDialogHeader,
     hideDialogFooter,
+    resetText,
+    doneText,
   } = useDisplayCustomization();
 
   const onChangeDate = (date: Dayjs, type: 'from' | 'to') => {
@@ -140,7 +142,7 @@ export const Dialog: React.FC<DialogContainerProps> = ({
             className="btn-outline reset-button"
             onClick={handleReset}
           >
-            Reset
+            {resetText}
           </button>
         </div>
       )}
@@ -163,14 +165,14 @@ export const Dialog: React.FC<DialogContainerProps> = ({
             onClick={toggleDialog}
             tabIndex={0}
           >
-            Done
+            {doneText}
           </button>
           <button
             type="button"
             className="btn-outline reset-button mobile"
             onClick={handleReset}
           >
-            Reset
+            {resetText}
           </button>
         </div>
       )}

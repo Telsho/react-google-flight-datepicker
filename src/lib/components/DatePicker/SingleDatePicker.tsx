@@ -2,19 +2,26 @@ import React from "react";
 import BaseDatePicker, { BaseDatePickerProps } from "./BaseDatePicker";
 import { ClientOnly } from "./ClientOnly";
 
+import { DatePickerLabels } from '../../translations';
+
 export interface SingleDatePickerProps
-  extends Omit<BaseDatePickerProps, "onChange"> {
-  startDate: Date | null;
+  extends Omit<BaseDatePickerProps, 'startDate' | 'endDate' | 'onChange'> {
+  startDate?: Date | null;
   startDatePlaceholder?: string;
-  onChange?: (date: Date | null) => void;
-  onCloseCalendar?: (date: Date | null) => void;
-  singleCalendar?: boolean;
+  labels?: DatePickerLabels;
+  resetText?: string;
+  doneText?: string;
+  onChange?: (startDate: Date | null) => void;
+  onCloseCalendar?: (startDate: Date | null) => void;
 }
 
 export const SingleDatePicker: React.FC<SingleDatePickerProps> = ({
   onChange = () => {},
   onCloseCalendar = () => {},
-  startDatePlaceholder = "Date",
+  startDatePlaceholder = "",
+  labels,
+  resetText,
+  doneText,
   ...props
 }) => (
   <ClientOnly>
@@ -24,6 +31,9 @@ export const SingleDatePicker: React.FC<SingleDatePickerProps> = ({
       isSingle={true}
       startDate={props.startDate}
       startDatePlaceholder={startDatePlaceholder}
+      labels={labels}
+      resetText={resetText}
+      doneText={doneText}
       onChange={(date) => onChange(date)}
       onCloseCalendar={(date) => onCloseCalendar(date)}
     />
