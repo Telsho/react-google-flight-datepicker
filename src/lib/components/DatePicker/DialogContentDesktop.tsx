@@ -148,7 +148,7 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
   const focusOnCalendar = useCallback(() => {
     if (!isClient || !containerRef.current) return;
 
-    const selector = ".day.selected, .month-calendar:not(.hidden) .day:not(.disabled)";
+    const selector = ".day.selected:not(.disabled), .month-calendar:not(.hidden) .day:not(.disabled)";
     const focusTarget = containerRef.current.querySelector<HTMLElement>(selector);
     focusTarget?.focus();
   }, [isClient]);
@@ -159,7 +159,9 @@ export const DialogContentDesktop: React.FC<DialogContentDesktopProps> = ({
     const dayIndex = target.getAttribute("data-day-index");
     if (!dayIndex) return;
 
-    e.preventDefault();
+    if (["ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown", " "].includes(e.key)) {
+      e.preventDefault();
+    }
     
     const calendarContainer = target.closest(".calendar-wrapper");
     const dateValue = parseInt(target.dataset.dateValue ?? "0");

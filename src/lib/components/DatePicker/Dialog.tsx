@@ -66,6 +66,49 @@ export const Dialog: React.FC<DialogContainerProps> = ({
     }
   }, [complsOpen, containerRef, hideAnimation]);
 
+  // Keyboard navigation & Focus trap for Dialog modal
+  useEffect(() => {
+    if (!complsOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        toggleDialog();
+        return;
+      }
+
+      if (e.key === 'Tab' && containerRef.current) {
+        const focusableElements = containerRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [tabindex="0"]:not([disabled]), [tabindex="-1"]:not([disabled]).day'
+        );
+        const focusables = Array.from(focusableElements).filter(
+          (el) => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement
+        );
+
+        if (focusables.length === 0) return;
+
+        const firstElement = focusables[0];
+        const lastElement = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [complsOpen, toggleDialog, containerRef]);
+
   return (
     <div
       className={cx('dialog-date-picker', {

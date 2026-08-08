@@ -98,6 +98,13 @@ export const DateInput: React.FC<DateInputProps> = ({
     handleClickDateInput(type);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClickDateInput(type);
+    }
+  };
+
   return (
     <div
       className={cx('date', { 
@@ -107,6 +114,7 @@ export const DateInput: React.FC<DateInputProps> = ({
       role="button"
       tabIndex={nonFocusable ? -1 : tabIndex}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       id={`${type}-date-input-button`}
     >
       {showIcon && (

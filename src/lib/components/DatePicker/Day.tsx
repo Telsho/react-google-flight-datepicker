@@ -31,11 +31,19 @@ export const Day = forwardRef<HTMLDivElement, DayProps>(({
   const dayRef = useRef<HTMLDivElement>(null);
   const { onSelectDate, onHoverDate } = useDateState();
 
-  const selectDate = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const selectDate = (e?: React.MouseEvent | React.KeyboardEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     if (disabled) return;
     onSelectDate(dateValue);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      selectDate(e);
+    }
   };
 
   const handleHoverDate = () => {
@@ -92,9 +100,12 @@ export const Day = forwardRef<HTMLDivElement, DayProps>(({
         'has-subtext': !!subText,
       })}
       onClick={selectDate}
+      onKeyDown={handleKeyDown}
       onMouseEnter={handleHoverDate}
-      role="button"
-      tabIndex={-1}
+      role="gridcell"
+      aria-selected={Boolean(selected)}
+      aria-disabled={Boolean(disabled)}
+      tabIndex={disabled ? -1 : 0}
       data-day-index={dateIndex}
       data-date-value={dateValue.valueOf()}
       ref={dayRef}
