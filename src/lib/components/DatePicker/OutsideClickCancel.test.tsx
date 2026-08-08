@@ -53,6 +53,45 @@ describe('Outside click / exit behavior', () => {
     expect(currentStart?.getDate()).toBe(20);
   });
 
+  it('clears is-focus input highlighting on outside click in RangeDatePicker', async () => {
+    const TestComponent = () => {
+      const [startDate, setStartDate] = useState<Date | null>(new Date());
+      const [endDate, setEndDate] = useState<Date | null>(new Date(Date.now() + 5 * 24 * 60 * 60 * 1000));
+
+      return (
+        <div>
+          <div data-testid="outside">Outside Area</div>
+          <RangeDatePicker
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(start, end) => {
+              setStartDate(start);
+              setEndDate(end);
+            }}
+          />
+        </div>
+      );
+    };
+
+    const { container } = render(<TestComponent />);
+
+    // Click the from-date input to open and focus
+    const fromInput = container.querySelector('#from-date-input-button');
+    expect(fromInput).not.toBeNull();
+    fireEvent.click(fromInput!);
+
+    // Check that it has 'is-focus' class while open
+    expect(fromInput!).toHaveClass('is-focus');
+
+    // Click outside to close
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('outside'));
+    });
+
+    // Verify 'is-focus' class is removed after closing
+    expect(fromInput!).not.toHaveClass('is-focus');
+  });
+
   it('persists selected date on outside click in SingleDatePicker', async () => {
     let currentStart: Date | null = new Date();
 

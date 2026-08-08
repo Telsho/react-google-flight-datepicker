@@ -219,6 +219,8 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
 
   useEffect(() => {
     if (!complsOpen && isFirstTime) {
+      setInputFocus(isSingle ? "from" : null);
+
       const _startDate = fromDateRef.current?.toDate() || null;
       const _endDate = toDateRef.current?.toDate() || null;
       if (isSingle) {
