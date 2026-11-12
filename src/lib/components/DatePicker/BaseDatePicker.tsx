@@ -103,7 +103,8 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
   singleCalendar = false,
 }) => {
   // State
-  const [complsOpen, setComplsOpen] = useState<boolean>(isOpen);
+  const [requestedOpen, setComplsOpen] = useState<boolean>(isOpen);
+  const complsOpen = requestedOpen && !disabled;
   const [inputFocus, setInputFocus] = useState<"from" | "to" | null>(
     isSingle ? "from" : null
   );
@@ -467,7 +468,7 @@ const BaseDatePicker: React.FC<BaseDatePickerInternalProps> = ({
         >
           <DateInputGroup />
           <DialogWrapper>
-            <Dialog />
+            {!disabled && <Dialog />}
           </DialogWrapper>
         </DatePickerProvider>
       </div>
